@@ -1,4 +1,5 @@
-module.exports = {
-  port: process.env.PORT,
-  mongoURI: process.env.MONGO_URI,
-};
+if (process.env.NODE_ENV === "production") {
+  module.exports = require("./production");
+} else {
+  module.exports = require("./development");
+}
