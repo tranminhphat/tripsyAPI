@@ -4,8 +4,13 @@
   "description": "Server for Graduation Thesis at UIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "author": "Phat Tran",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.14",
+    "nodemon": "^2.0.7"
+  }
 }
