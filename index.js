@@ -1,8 +1,11 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const config = require("./config");
-
 const app = express();
+const mongoose = require("mongoose");
+
+const config = require("./config");
+const routes = require("./routes");
+
+app.use("/api", routes);
 
 mongoose
   .connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
