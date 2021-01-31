@@ -5,4 +5,6 @@ router.get("/", (_, res) => {
   res.send({ hi: "there" });
 });
 
+router.use("/auth", require("./authRoutes"));
+
 module.exports = router;
