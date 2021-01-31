@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const { errorsHandler } = require("../handlers/errorsHandler");
 
 exports.login = (req, res) => {
   console.log(req.body);
@@ -6,13 +7,13 @@ exports.login = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   try {
-    const user = await User.create({ username, password });
+    const user = await User.create({ email, username, password });
     res.status(201).json(user);
   } catch (err) {
-    console.error(err);
-    res.status(400).send("Error, user not created");
+    const errors = errorsHandler(err);
+    res.status(400).json({ errors });
   }
 };
