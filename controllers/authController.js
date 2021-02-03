@@ -1,13 +1,6 @@
 const User = require("../models/User");
 const { errorsHandler } = require("../handlers/errorsHandler");
-const jwt = require("jsonwebtoken");
-
-const maxAge = 24 * 60 * 60;
-const createToken = (id) => {
-  return jwt.sign({ id }, "tripsy@2021", {
-    expiresIn: maxAge,
-  });
-};
+const { maxAge, createToken } = require("../helpers/jwtHelpers");
 
 exports.login = (req, res) => {
   console.log(req.body);
