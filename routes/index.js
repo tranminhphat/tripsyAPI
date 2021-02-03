@@ -1,8 +1,11 @@
 const { Router } = require("express");
-const { requireAuth } = require("../middlewares/authMiddleware");
+const {
+  requireAuth,
+  checkCurrentUser,
+} = require("../middlewares/authMiddleware");
 const router = Router();
 
-router.get("/", (_, res) => {
+router.get("/", checkCurrentUser, (_, res) => {
   res.send({ hi: "there" });
 });
 router.get("/protectedroute", requireAuth, (_, res) =>
