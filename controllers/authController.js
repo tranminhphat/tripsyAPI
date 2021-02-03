@@ -2,6 +2,7 @@ const User = require("../models/User");
 const { errorsHandler } = require("../handlers/errorsHandler");
 const { maxAge, createToken } = require("../helpers/jwtHelpers");
 
+/* Controller for /api/auth/login */
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -13,6 +14,7 @@ exports.login = async (req, res) => {
   }
 };
 
+/* Controller for /api/auth/register */
 exports.register = async (req, res) => {
   const { email, username, password } = req.body;
 
