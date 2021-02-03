@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
 const config = require("./config");
@@ -7,6 +8,7 @@ const routes = require("./routes");
 
 //Middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api", routes);
 
 mongoose
