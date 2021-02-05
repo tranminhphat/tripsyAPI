@@ -33,6 +33,11 @@ exports.register = async (req, res) => {
 
 /* Controller for GET: /api/auth/logout */
 exports.logout = (_, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.status(302).send("redirect to homepage");
+  try {
+    res.cookie("jwt", "", { maxAge: 1 });
+    res.status(200).send("redirect to homepage");
+  } catch (err) {
+    const errors = errorsHandler(err);
+    res.status(400).json({ errors });
+  }
 };
