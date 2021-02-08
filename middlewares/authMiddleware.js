@@ -33,7 +33,7 @@ const checkCurrentUser = (req, res, next) => {
       } else {
         console.log(decodedToken);
         let user = User.findById(decodedToken.id);
-        res.locals.user = user;
+        res.status(200).json({ user });
         next();
       }
     });

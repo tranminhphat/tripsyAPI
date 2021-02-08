@@ -18,10 +18,10 @@ exports.login = async (req, res) => {
 
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
-  const { email, username, password } = req.body;
+  const { fullName, email, username, password } = req.body;
 
   try {
-    const user = await User.create({ email, username, password });
+    const user = await User.create({ fullName, email, username, password });
     const token = createToken(user._id);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     res.status(201).json(user);
