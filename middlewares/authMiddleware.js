@@ -22,23 +22,22 @@ const requireAuth = (req, res, next) => {
 
 /* Check and send back the current user by jwt */
 const checkCurrentUser = (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies.jwt;
 
   if (token) {
-    jwt.verify(token, "tripsy@2021", (err, decodedToken) => {
+    jwt.verify(token, "tripsy@2021", async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.locals.user = null;
+        res.status(400).json({ err });
         next();
       } else {
-        console.log(decodedToken);
-        let user = User.findById(decodedToken.id);
+        let user = await User.findById(decodedToken.id);
         res.status(200).json({ user });
         next();
       }
     });
   } else {
-    res.locals.user = null;
+    res.status(400).json({});
     next();
   }
 };
