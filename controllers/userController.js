@@ -9,5 +9,10 @@ exports.getUser = async (req, res) => {
     return res.status(400).send();
   }
 
-  return res.status(200).json({ user });
+  return res.status(200).json({
+    _id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    username: user.username,
+  });
 };
