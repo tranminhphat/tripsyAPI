@@ -14,5 +14,6 @@ exports.getUser = async (req, res) => {
     fullName: user.fullName,
     email: user.email,
     username: user.username,
+    isVerified: user.isVerified,
   });
 };
