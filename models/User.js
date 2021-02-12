@@ -45,9 +45,6 @@ userSchema.pre("save", async function (next) {
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (user) {
-    if (!user.isVerified) {
-      throw new Error("Please confirm your email to login");
-    }
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
       return user;

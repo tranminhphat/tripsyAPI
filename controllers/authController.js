@@ -12,7 +12,7 @@ exports.login = async (req, res) => {
     const user = await User.login(email, password);
     const token = createToken(user._id);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id });
+    res.status(200).json({ userId: user._id });
   } catch (err) {
     const errors = errorsHandler(err);
     res.status(400).json({ errors });

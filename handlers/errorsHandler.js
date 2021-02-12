@@ -1,6 +1,8 @@
 exports.errorsHandler = (err) => {
   let errors = {};
 
+  console.log(err);
+
   /* Handle duplicate field error */
   if (err.code === 11000) {
     const key = Object.keys(err.keyValue)[0];
