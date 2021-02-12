@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config/development");
 const User = require("../models/User");
 
 /* Check jwt for route that require authentication */
@@ -6,7 +7,7 @@ const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (token) {
-    jwt.verify(token, "tripsy@2021", (err, decodedToken) => {
+    jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.status(200).send("redirect to login page");
@@ -25,7 +26,7 @@ const checkCurrentUser = (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (token) {
-    jwt.verify(token, "tripsy@2021", async (err, decodedToken) => {
+    jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.status(400).json({ err });
