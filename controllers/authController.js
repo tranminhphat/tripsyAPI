@@ -25,9 +25,7 @@ exports.register = async (req, res) => {
 
   try {
     const user = await User.create({ fullName, email, username, password });
-    const token = createToken(user._id);
     sendEmailVerification(user._id, user.email);
-    res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     res.status(201).json(user);
   } catch (err) {
     const errors = errorsHandler(err);
@@ -43,6 +41,18 @@ exports.logout = (_, res) => {
   } catch (err) {
     const errors = errorsHandler(err);
     res.status(400).json({ errors });
+  }
+};
+
+/* Controller for POST: /api/auth/resendEmailVerification */
+exports.resendEmailVerification = async (req, res) => {
+  const { userId, userEmail } = req.body;
+  try {
+    sendEmailVerification(userId, userEmail);
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(400).send();
   }
 };
 
