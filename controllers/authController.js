@@ -23,14 +23,24 @@ exports.login = async (req, res) => {
 
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
-  const { fullName, email, username, password, avatarUrl } = req.body;
+  const { fullName, email, username, password, avatarBase64 } = req.body;
 
   try {
-    const res = axios.post("http://localhost:2004/api/upload/image", {
-      data: avatarUrl,
+    const { data } = await axios.post(
+      "http://localhost:2004/api/upload/image",
+      {
+        data: avatarBase64,
+      }
+    );
+    const avatarUrl = data.imageUrl;
+    const user = await User.create({
+      fullName,
+      email,
+      username,
+      password,
+      avatarUrl,
     });
-    // const user = await User.create({ fullName, email, username, password });
-    // sendEmailVerification(user._id, user.email);
+    sendEmailVerification(user._id, user.email);
     res.status(201).json(user);
   } catch (err) {
     const errors = errorsHandler(err);

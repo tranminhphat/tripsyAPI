@@ -3,7 +3,6 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const cloudinary = require("cloudinary");
 
 const config = require("./config");
 const routes = require("./routes");
@@ -25,12 +24,6 @@ app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/api", routes);
-
-// cloudinary.config({
-//   cloud_name: config.cloudinary.CLOUD_NAME,
-//   api_key: config.cloudinary.API_KEY,
-//   api_secret: config.cloudinary.API_SECRET,
-// });
 
 mongoose
   .connect(config.MONGO_URI, {
