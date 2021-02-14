@@ -3,11 +3,12 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary");
 
 const config = require("./config");
 const routes = require("./routes");
 
-const whitelist = config.corsWhiteList;
+const whitelist = config.CORS_WHITELIST;
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -20,21 +21,27 @@ const corsOptions = {
 };
 
 //Middlewares
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/api", routes);
 
+// cloudinary.config({
+//   cloud_name: config.cloudinary.CLOUD_NAME,
+//   api_key: config.cloudinary.API_KEY,
+//   api_secret: config.cloudinary.API_SECRET,
+// });
+
 mongoose
-  .connect(config.mongoURI, {
+  .connect(config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
   .then(() => {
     console.log("Connect to MongoDB");
-    app.listen(config.port, () => {
-      console.log(`Server listening on port ${config.port}`);
+    app.listen(2004, () => {
+      console.log(`Server listening on port ${config.PORT}`);
     });
   })
   .catch((err) => console.error(err));

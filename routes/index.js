@@ -11,5 +11,6 @@ router.get("/protectedroute", requireAuth, (_, res) =>
 );
 router.use("/auth", require("./authRoutes"));
 router.use("/users", require("./userRoutes"));
+router.use("/upload", require("./uploadRoutes"));
 
 module.exports = router;

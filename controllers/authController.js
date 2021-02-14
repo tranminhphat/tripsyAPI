@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const https = require("https");
+const axios = require("axios");
 const { errorsHandler } = require("../handlers/errorsHandler");
 const { maxAge, createToken } = require("../helpers/jwtHelpers");
 const { sendEmailVerification } = require("../helpers/sendVerificationEmail");
@@ -21,11 +23,14 @@ exports.login = async (req, res) => {
 
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
-  const { fullName, email, username, password } = req.body;
+  const { fullName, email, username, password, avatarUrl } = req.body;
 
   try {
-    const user = await User.create({ fullName, email, username, password });
-    sendEmailVerification(user._id, user.email);
+    const res = axios.post("http://localhost:2004/api/upload/image", {
+      data: avatarUrl,
+    });
+    // const user = await User.create({ fullName, email, username, password });
+    // sendEmailVerification(user._id, user.email);
     res.status(201).json(user);
   } catch (err) {
     const errors = errorsHandler(err);
