@@ -1,10 +1,12 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const https = require("https");
 const axios = require("axios");
 const { errorsHandler } = require("../handlers/errorsHandler");
 const { maxAge, createToken } = require("../helpers/jwtHelpers");
-const { sendEmailVerification } = require("../helpers/sendVerificationEmail");
+const {
+  sendEmailVerification,
+  sendResetPasswordEmail,
+} = require("../helpers/emailHelpers");
 const { EMAIL_SECRET } = require("../config/development");
 
 /* Controller for POST: /api/auth/login */
@@ -57,7 +59,7 @@ exports.logout = (_, res) => {
   }
 };
 
-/* Controller for POST: /api/auth/resendEmailVerification */
+/* Controller for POST: /api/auth/resend-email-verification */
 exports.resendEmailVerification = async (req, res) => {
   const { userId, userEmail } = req.body;
   try {
@@ -78,4 +80,20 @@ exports.verification = async (req, res) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+/* Controller for POST:/api/auth/verification/forgot-password */
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    User.findOne({ email }, (err, user) => {
+      if (err || !user) {
+        res
+          .status(400)
+          .json({ error: "User with this email does not exists." });
+      }
+
+      sendResetPasswordEmail(user._id, user.email);
+    });
+  } catch (e) {}
 };

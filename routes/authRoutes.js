@@ -6,6 +6,10 @@ router.post("/login", authController.login);
 router.post("/register", authController.register);
 router.get("/logout", authController.logout);
 router.get("/verification/:token", authController.verification);
-router.post("/resendEmailVerification", authController.resendEmailVerification);
+router.post(
+  "/resend-email-verification",
+  authController.resendEmailVerification
+);
+router.post("/forgot-password", authController.forgotPassword);
 
 module.exports = router;
