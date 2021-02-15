@@ -7,14 +7,18 @@ const {
   sendEmailVerification,
   sendResetPasswordEmail,
 } = require("../helpers/emailHelpers");
-const { EMAIL_SECRET } = require("../config/development");
+const {
+  EMAIL_SECRET,
+  JWT_SECRET,
+  FORGOT_PASSWORD_SECRET,
+} = require("../config/development");
 
 /* Controller for POST: /api/auth/login */
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.login(email, password);
-    const token = createToken(user._id);
+    const token = createToken(user._id, JWT_SECRET);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     res.status(200).json({ userId: user._id });
   } catch (err) {
@@ -26,7 +30,7 @@ exports.login = async (req, res) => {
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
   const { fullName, email, username, password, avatarBase64 } = req.body;
-  const userProperties = { fullName, email, username, password };
+  let userProperties = { fullName, email, username, password };
 
   try {
     if (avatarBase64) {
