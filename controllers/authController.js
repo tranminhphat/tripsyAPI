@@ -24,22 +24,20 @@ exports.login = async (req, res) => {
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
   const { fullName, email, username, password, avatarBase64 } = req.body;
+  const userProperties = { fullName, email, username, password };
 
   try {
-    const { data } = await axios.post(
-      "http://localhost:2004/api/upload/image",
-      {
-        data: avatarBase64,
-      }
-    );
-    const avatarUrl = data.imageUrl;
-    const user = await User.create({
-      fullName,
-      email,
-      username,
-      password,
-      avatarUrl,
-    });
+    if (avatarBase64) {
+      const { data } = await axios.post(
+        "http://localhost:2004/api/upload/image",
+        {
+          data: avatarBase64,
+        }
+      );
+      const avatarUrl = data.imageUrl;
+      userProperties = { ...userProperties, avatarUrl };
+    }
+    const user = await User.create(userProperties);
     sendEmailVerification(user._id, user.email);
     res.status(201).json(user);
   } catch (err) {

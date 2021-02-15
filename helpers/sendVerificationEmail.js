@@ -19,7 +19,7 @@ exports.sendEmailVerification = (userId, userEmail) => {
     const url = `http://localhost:2004/api/auth/verification/${emailToken}`;
 
     const mailOptions = {
-      from: "tripsy2021@gmail.com",
+      from: "Tripsy@2021 <noreply@gmail.com>",
       to: userEmail,
       subject: "Confirm your email",
       html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
