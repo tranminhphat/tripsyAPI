@@ -43,13 +43,13 @@ exports.sendResetPasswordEmail = (userId, userEmail) => {
         console.log(err);
         return;
       }
-      const url = `http://localhost:2004/api/auth/reset-password/${forgotPasswordToken}`;
+      const url = `http://localhost:3000/reset-password/${forgotPasswordToken}`;
 
       const mailOptions = {
         from: "Tripsy@2021 <noreply@gmail.com>",
         to: userEmail,
         subject: "Reset your password",
-        html: `Please click this link to reset your password: <a href="${url}">${url}</a>`,
+        html: `Please click this link to reset your password: <a href="${url}" target="_blank">${url}</a>`,
       };
 
       transporter.sendMail(mailOptions);

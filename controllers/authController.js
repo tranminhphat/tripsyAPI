@@ -90,7 +90,7 @@ exports.verification = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    User.findOne({ email }, (err, user) => {
+    await User.findOne({ email }, (err, user) => {
       if (err || !user) {
         res
           .status(400)
@@ -98,6 +98,48 @@ exports.forgotPassword = async (req, res) => {
       }
 
       sendResetPasswordEmail(user._id, user.email);
+      res.status(200).send();
     });
   } catch (e) {}
+};
+
+/* Controller for POST:/api/auth/reset-password*/
+exports.resetPassword = (req, res) => {
+  const { resetPasswordToken, newPassword } = req.body;
+  if (resetPasswordToken) {
+    jwt.verify(
+      resetPasswordToken,
+      FORGOT_PASSWORD_SECRET,
+      async (err, decodedToken) => {
+        if (err) {
+          return res
+            .status(401)
+            .json({ error: "Invalid token or it is expired" });
+        }
+
+        const { id } = decodedToken;
+        await User.findOne({ _id: id }, (error, user) => {
+          if (error || !user) {
+            return res
+              .status(400)
+              .json({ error: "User with this token does not exists" });
+          }
+          user.password = newPassword;
+          user.save((err, result) => {
+            if (err) {
+              return res
+                .status(400)
+                .json({ error: "Error occur when changing password" });
+            }
+
+            return res
+              .status(200)
+              .json({ message: "Your password has been changed successfully" });
+          });
+        });
+      }
+    );
+  } else {
+    return res.status(401).json({ error: "Authentication error" });
+  }
 };
