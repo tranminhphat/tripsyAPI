@@ -1,32 +1,32 @@
 exports.errorsHandler = (err) => {
-  let errors = {};
+  let error = {};
 
   console.log(err);
 
   /* Handle duplicate field error */
   if (err.code === 11000) {
     const key = Object.keys(err.keyValue)[0];
-    errors[key] = `${key} has been used`;
+    error[key] = `${key} has been used`;
 
-    return errors;
+    return error;
   }
   /* Handle login errors */
   if (err.message === "Invalid email") {
-    errors.email = "That email is not registered";
+    error.email = "That email is not registered";
 
-    return errors;
+    return error;
   }
 
   if (err.message === "Invalid password") {
-    errors.password = "That password is incorrect";
+    error.password = "That password is incorrect";
 
-    return errors;
+    return error;
   }
 
   /* Handle register errors */
-  Object.values(err.errors).forEach(({ properties }) => {
-    errors[properties.path] = properties.message;
+  Object.values(err.error).forEach(({ properties }) => {
+    error[properties.path] = properties.message;
   });
 
-  return errors;
+  return error;
 };
