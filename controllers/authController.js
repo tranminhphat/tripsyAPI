@@ -80,7 +80,7 @@ exports.verification = async (req, res) => {
   try {
     const { id } = jwt.verify(req.params.token, EMAIL_SECRET);
     await User.updateOne({ _id: id }, { isVerified: true });
-    res.status(200).send("Congrats, your email has been successfully verified");
+    res.status(200).send("Chúc mừng, địa chỉ email của bạn đã được xác nhận");
   } catch (e) {
     console.error(e);
   }
@@ -89,18 +89,19 @@ exports.verification = async (req, res) => {
 /* Controller for POST:/api/auth/verification/forgot-password */
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
+  console.log(email);
   try {
     await User.findOne({ email }, (err, user) => {
       if (err || !user) {
-        res
-          .status(400)
-          .json({ error: "User with this email does not exists." });
+        return res.status(400).json({ error: "Tài khoản không tồn tại" });
       }
 
       sendResetPasswordEmail(user._id, user.email);
       res.status(200).send();
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 /* Controller for POST:/api/auth/reset-password*/
@@ -114,32 +115,30 @@ exports.resetPassword = (req, res) => {
         if (err) {
           return res
             .status(401)
-            .json({ error: "Invalid token or it is expired" });
+            .json({ error: "Token không hợp lệ hoặc đã hết hạn" });
         }
 
         const { id } = decodedToken;
         await User.findOne({ _id: id }, (error, user) => {
           if (error || !user) {
-            return res
-              .status(400)
-              .json({ error: "User with this token does not exists" });
+            return res.status(400).json({ error: "Tài khoản không tồn tại" });
           }
           user.password = newPassword;
           user.save((err, result) => {
             if (err) {
               return res
                 .status(400)
-                .json({ error: "Error occur when changing password" });
+                .json({ error: "Xảy ra lỗi khi thay đổi password" });
             }
 
             return res
               .status(200)
-              .json({ message: "Your password has been changed successfully" });
+              .json({ message: "Mật khẩu của bạn đã thay đổi thành công" });
           });
         });
       }
     );
   } else {
-    return res.status(401).json({ error: "Authentication error" });
+    return res.status(401).json({ error: "Lỗi xác thực" });
   }
 };

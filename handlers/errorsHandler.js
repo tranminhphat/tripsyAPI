@@ -6,19 +6,19 @@ exports.errorsHandler = (err) => {
   /* Handle duplicate field error */
   if (err.code === 11000) {
     const key = Object.keys(err.keyValue)[0];
-    error[key] = `${key} has been used`;
+    error[key] = `${key} đã được sử dụng`;
 
     return error;
   }
   /* Handle login errors */
   if (err.message === "Invalid email") {
-    error.email = "That email is not registered";
+    error.email = "Email chưa được đăng ký";
 
     return error;
   }
 
   if (err.message === "Invalid password") {
-    error.password = "That password is incorrect";
+    error.password = "Sai mật khẩu";
 
     return error;
   }
