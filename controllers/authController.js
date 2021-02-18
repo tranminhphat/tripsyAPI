@@ -29,8 +29,29 @@ exports.login = async (req, res) => {
 
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
-  const { fullName, email, username, password, avatarBase64 } = req.body;
-  let userProperties = { fullName, email, username, password };
+  const {
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+    gender,
+    dateOfBirth,
+    phoneNumber,
+    address,
+    avatarBase64,
+  } = req.body;
+  let userProperties = {
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+    gender,
+    dateOfBirth,
+    phoneNumber,
+    address,
+  };
 
   try {
     if (avatarBase64) {
