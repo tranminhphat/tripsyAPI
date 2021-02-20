@@ -1,5 +1,6 @@
 const userService = require("../services/userService");
 const axios = require("axios");
+const bcrypt = require("bcrypt");
 
 /* Controller for GET: /api/user/id */
 
@@ -37,8 +38,9 @@ exports.updateUser = async (req, res) => {
   if (!user) {
     return res.status(404).send();
   }
-  let updatedUser = { ...user, ...req.body };
-  const { avatarUrl } = req.body;
+  let updatedUser = { ...user._doc, ...req.body };
+  const { avatarUrl, password } = req.body;
+
   if (avatarUrl) {
     const { data } = await axios.post(
       "http://localhost:2004/api/upload/image",
@@ -46,8 +48,19 @@ exports.updateUser = async (req, res) => {
         data: avatarUrl,
       }
     );
-    updatedUser = { ...user._doc, ...req.body, avatarUrl: data.imageUrl };
+    updatedUser = { ...updatedUser, avatarUrl: data.imageUrl };
   }
-  await userService.updateUserById(id, updatedUser);
-  return res.status(200).json({ message: "Update user successfully" });
+
+  if (password) {
+    const salt = await bcrypt.genSalt();
+    const newPassword = await bcrypt.hash(password, salt);
+    updatedUser = { ...updatedUser, password: newPassword };
+  }
+
+  try {
+    await userService.updateUserById(id, updatedUser);
+    return res.status(200).json({ message: "Update user successfully" });
+  } catch (err) {
+    console.error(err);
+  }
 };
