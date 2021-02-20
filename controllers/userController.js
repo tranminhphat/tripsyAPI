@@ -2,7 +2,7 @@ const userService = require("../services/userService");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 
-/* Controller for GET: /api/user/id */
+/* Controller for GET: /api/users/id */
 
 exports.getUser = async (req, res) => {
   const { id } = req.params;
@@ -29,7 +29,7 @@ exports.getUser = async (req, res) => {
   });
 };
 
-/* Controller for PUT: /api/user/id */
+/* Controller for PUT: /api/users/id */
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
@@ -46,6 +46,7 @@ exports.updateUser = async (req, res) => {
       "http://localhost:2004/api/upload/image",
       {
         data: avatarUrl,
+        userId: id,
       }
     );
     updatedUser = { ...updatedUser, avatarUrl: data.imageUrl };

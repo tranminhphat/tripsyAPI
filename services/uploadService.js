@@ -7,9 +7,10 @@ cloudinary.config({
   api_secret: config.cloudinary.API_SECRET,
 });
 
-exports.uploadUserAvatar = async (fileStr) => {
+exports.uploadUserAvatar = async (fileStr, userId) => {
   const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
     upload_preset: "userAvatar",
+    folder: `users/${userId}/avatar`,
   });
   return uploadedResponse;
 };

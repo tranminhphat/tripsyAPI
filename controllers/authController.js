@@ -13,6 +13,8 @@ const {
   FORGOT_PASSWORD_SECRET,
 } = require("../config/development");
 
+const userService = require("../services/userService");
+
 /* Controller for POST: /api/auth/login */
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -54,17 +56,19 @@ exports.register = async (req, res) => {
   };
 
   try {
+    const user = await User.create(userProperties);
     if (avatarBase64) {
       const { data } = await axios.post(
         "http://localhost:2004/api/upload/image",
         {
           data: avatarBase64,
+          userId: user._id,
         }
       );
       const avatarUrl = data.imageUrl;
       userProperties = { ...userProperties, avatarUrl };
+      await userService.updateUserById(user._id, userProperties);
     }
-    const user = await User.create(userProperties);
     sendEmailVerification(user._id, user.email);
     res.status(201).json(user);
   } catch (err) {
