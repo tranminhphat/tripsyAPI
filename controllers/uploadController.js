@@ -6,8 +6,15 @@ exports.image = async (req, res) => {
     const fileStr = req.body.data;
     const userId = req.body.userId;
     const uploadedResponse = await uploadUserAvatar(fileStr, userId);
-    res.status(200).json({ imageUrl: uploadedResponse.secure_url });
+    return res.status(200).json({ imageUrl: uploadedResponse.secure_url });
   } catch (err) {
-    console.log(err);
+    return res
+      .status(500)
+      .json({
+        error: {
+          userMessage: "Xảy ra lỗi khi upload ảnh",
+          internalMessage: "Error occur while uploading image",
+        },
+      });
   }
 };

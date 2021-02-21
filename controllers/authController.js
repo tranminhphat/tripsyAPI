@@ -1,7 +1,10 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const { errorsHandler } = require("../handlers/errorsHandler");
+const {
+  loginErrorHandler,
+  registerErrorHandler,
+} = require("../handlers/errorsHandler");
 const { maxAge, createToken } = require("../helpers/jwtHelpers");
 const {
   sendEmailVerification,
@@ -22,10 +25,10 @@ exports.login = async (req, res) => {
     const user = await User.login(email, password);
     const token = createToken(user._id, JWT_SECRET);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
-    res.status(200).json({ userId: user._id });
+    return res.status(200).json({ userId: user._id });
   } catch (err) {
-    const errors = errorsHandler(err);
-    res.status(400).json({ errors });
+    const error = loginErrorHandler(err);
+    return res.status(400).json({ error });
   }
 };
 
@@ -70,10 +73,13 @@ exports.register = async (req, res) => {
       await userService.updateUserById(user._id, userProperties);
     }
     sendEmailVerification(user._id, user.email);
-    res.status(201).json(user);
+    return res
+      .status(201)
+      .json({ userMessage: "Đăng ký tài khoản thành công" });
   } catch (err) {
-    const errors = errorsHandler(err);
-    res.status(400).json({ errors });
+    console.log(err);
+    const error = registerErrorHandler(err);
+    return res.status(400).json({ error });
   }
 };
 
@@ -81,10 +87,14 @@ exports.register = async (req, res) => {
 exports.logout = (_, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 1 });
-    res.status(200).send("redirect to homepage");
+    return res.status(200).json();
   } catch (err) {
-    const errors = errorsHandler(err);
-    res.status(400).json({ errors });
+    return res.status(400).json({
+      error: {
+        userMessage: "Xảy ra lỗi khi đăng xuất",
+        internalMessage: "Login failed",
+      },
+    });
   }
 };
 
@@ -93,10 +103,14 @@ exports.resendEmailVerification = async (req, res) => {
   const { userId, userEmail } = req.body;
   try {
     sendEmailVerification(userId, userEmail);
-    res.status(200).send();
+    return res.status(200).json();
   } catch (err) {
-    console.error(err);
-    res.status(400).send();
+    return res.status(400).json({
+      error: {
+        userMessage: "Xảy ra lỗi khi gửi email xác nhận",
+        internalMessage: "Error occur while sending verification email",
+      },
+    });
   }
 };
 
@@ -105,27 +119,43 @@ exports.verification = async (req, res) => {
   try {
     const { id } = jwt.verify(req.params.token, EMAIL_SECRET);
     await User.updateOne({ _id: id }, { isVerified: true });
-    res.status(200).send("Chúc mừng, địa chỉ email của bạn đã được xác nhận");
+    return res.status(200).json({
+      userMessage: "Chúc mừng, địa chỉ email của bạn đã được xác nhận",
+    });
   } catch (e) {
-    console.error(e);
+    return res.status(400).json({
+      error: {
+        userMessage: "Xảy ra lỗi khi xác thực email",
+        internalMessage: "Error occur while verifying email",
+      },
+    });
   }
 };
 
 /* Controller for POST:/api/auth/verification/forgot-password */
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
-  console.log(email);
   try {
     await User.findOne({ email }, (err, user) => {
       if (err || !user) {
-        return res.status(400).json({ error: "Tài khoản không tồn tại" });
+        return res.status(400).json({
+          error: {
+            userMessage: "Tài khoản không tồn tại",
+            internalMessage: "User is not existed",
+          },
+        });
       }
 
       sendResetPasswordEmail(user._id, user.email);
-      res.status(200).send();
+      return res.status(200).json();
     });
   } catch (e) {
-    console.error(e);
+    return res.status(400).json({
+      error: {
+        userMessage: "Xảy ra lỗi khi gửi email",
+        internalMessage: "Error occur while sending reset password email",
+      },
+    });
   }
 };
 
@@ -138,27 +168,38 @@ exports.resetPassword = (req, res) => {
       FORGOT_PASSWORD_SECRET,
       async (err, decodedToken) => {
         if (err) {
-          return res
-            .status(401)
-            .json({ error: "Token không hợp lệ hoặc đã hết hạn" });
+          return res.status(401).json({
+            error: {
+              userMessage: "Token không hợp lệ hoặc đã hết hạn",
+              internalMessage: "Invalid token or it is expired",
+            },
+          });
         }
 
         const { id } = decodedToken;
         await User.findOne({ _id: id }, (error, user) => {
           if (error || !user) {
-            return res.status(400).json({ error: "Tài khoản không tồn tại" });
+            return res.status(400).json({
+              error: {
+                userMessage: "Tài khoản không tồn tại",
+                internalMessage: "User is not existed",
+              },
+            });
           }
           user.password = newPassword;
           user.save((err, result) => {
             if (err) {
-              return res
-                .status(400)
-                .json({ error: "Xảy ra lỗi khi thay đổi password" });
+              return res.status(400).json({
+                error: {
+                  userMessage: "Xảy ra lỗi khi thay đổi password",
+                  internalMessage: "Error occur when changing password",
+                },
+              });
             }
 
             return res
               .status(200)
-              .json({ message: "Mật khẩu của bạn đã thay đổi thành công" });
+              .json({ userMessage: "Mật khẩu của bạn đã thay đổi thành công" });
           });
         });
       }

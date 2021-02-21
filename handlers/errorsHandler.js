@@ -1,32 +1,36 @@
-exports.errorsHandler = (err) => {
+exports.registerErrorHandler = (err) => {
   let error = {};
 
-  console.log(err);
-
-  /* Handle duplicate field error */
   if (err.code === 11000) {
     const key = Object.keys(err.keyValue)[0];
-    error[key] = `${key} đã được sử dụng`;
+    error.userMessage = `${key} đã được sử dụng`;
+    error.internalMessage = `${key} is duplicate`;
 
     return error;
   }
-  /* Handle login errors */
+};
+
+exports.loginErrorHandler = (err) => {
+  let error = {};
+
   if (err.message === "Invalid email") {
-    error.email = "Email chưa được đăng ký";
+    error.userMessage = "Email chưa được đăng ký";
+    error.internalMessage = "Email is not registered";
+
+    return error;
+  }
+
+  if (err.message === "Email is not verified") {
+    error.userMessage = "Email chưa được xác nhận";
+    error.internalMessage = "Email is not verified";
 
     return error;
   }
 
   if (err.message === "Invalid password") {
-    error.password = "Sai mật khẩu";
+    error.userMessage = "Sai mật khẩu";
+    error.internalMessage = "Invalid password";
 
     return error;
   }
-
-  /* Handle register errors */
-  Object.values(err.error).forEach(({ properties }) => {
-    error[properties.path] = properties.message;
-  });
-
-  return error;
 };

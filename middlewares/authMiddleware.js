@@ -9,15 +9,26 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
-        res.status(200).send("redirect to login page");
+        res.status(400).json({
+          error: {
+            userMessage: "Token không hợp lệ",
+            internalMessage: "Invalid token",
+          },
+        });
+        next();
       } else {
-        console.log(decodedToken);
+        res.status(200).json({ decodedToken });
         next();
       }
     });
   } else {
-    res.status(200).send("redirect to login page");
+    res.status(400).json({
+      error: {
+        userMessage: "Token không tồn tại",
+        internalMessage: "Token is not existed",
+      },
+    });
+    next();
   }
 };
 
@@ -28,8 +39,12 @@ const checkCurrentUser = (req, res, next) => {
   if (token) {
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
       if (err) {
-        console.log(err.message);
-        res.status(400).json({ err });
+        res.status(400).json({
+          error: {
+            userMessage: "Token không hợp lệ",
+            internalMessage: "Invalid token",
+          },
+        });
         next();
       } else {
         let user = await User.findById(decodedToken.id);
@@ -38,6 +53,12 @@ const checkCurrentUser = (req, res, next) => {
       }
     });
   } else {
+    res.status(400).json({
+      error: {
+        userMessage: "Token không tồn tại",
+        internalMessage: "Token is not existed",
+      },
+    });
     next();
   }
 };
