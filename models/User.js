@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
-
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -50,6 +50,10 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+    },
+    roleId: {
+      type: Schema.Types.ObjectId,
+      ref: "Role",
     },
     isVerified: {
       type: Boolean,
