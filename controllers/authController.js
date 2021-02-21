@@ -34,48 +34,15 @@ exports.login = async (req, res) => {
 
 /* Controller for POST: /api/auth/register */
 exports.register = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    username,
-    password,
-    gender,
-    dateOfBirth,
-    phoneNumber,
-    address,
-    avatarBase64,
-  } = req.body;
-  let userProperties = {
-    firstName,
-    lastName,
-    email,
-    username,
-    password,
-    gender,
-    dateOfBirth,
-    phoneNumber,
-    address,
-  };
-
+  const model = req.body;
   try {
-    const user = await User.create(userProperties);
-    if (avatarBase64) {
-      const { data } = await axios.post(
-        "http://localhost:2004/api/upload/image",
-        {
-          data: avatarBase64,
-          userId: user._id,
-        }
-      );
-      const avatarUrl = data.imageUrl;
-      userProperties = { ...userProperties, avatarUrl };
-      await userService.updateUserById(user._id, userProperties);
-    }
+    const user = await userService.createUser(model);
     sendEmailVerification(user._id, user.email);
-    return res
-      .status(201)
-      .json({ userMessage: "Đăng ký tài khoản thành công" });
+    return res.status(201).json({
+      _id: user._id,
+      firstName: user.firstName,
+      email: user.email,
+    });
   } catch (err) {
     console.log(err);
     const error = registerErrorHandler(err);
@@ -118,7 +85,7 @@ exports.resendEmailVerification = async (req, res) => {
 exports.verification = async (req, res) => {
   try {
     const { id } = jwt.verify(req.params.token, EMAIL_SECRET);
-    await User.updateOne({ _id: id }, { isVerified: true });
+    await userService.updateUserById(id, { isVerified: true });
     return res.status(200).json({
       userMessage: "Chúc mừng, địa chỉ email của bạn đã được xác nhận",
     });

@@ -57,7 +57,7 @@ exports.updateUser = async (req, res) => {
       });
     }
 
-    let updatedUser = { ...user._doc, ...req.body };
+    let updatedProperties = { ...req.body };
     const { avatarUrl, password } = req.body;
 
     if (avatarUrl) {
@@ -68,17 +68,17 @@ exports.updateUser = async (req, res) => {
           userId: id,
         }
       );
-      updatedUser = { ...updatedUser, avatarUrl: data.imageUrl };
+      updatedProperties = { ...updatedProperties, avatarUrl: data.imageUrl };
     }
 
     if (password) {
       const salt = await bcrypt.genSalt();
       const newPassword = await bcrypt.hash(password, salt);
-      updatedUser = { ...updatedUser, password: newPassword };
+      updatedProperties = { ...updatedProperties, password: newPassword };
     }
 
     try {
-      await userService.updateUserById(id, updatedUser);
+      await userService.updateUserById(id, updatedProperties);
       return res.status(200).json({ userMessage: "Cập nhật thành công" });
     } catch (err) {
       return res.status(400).json({
