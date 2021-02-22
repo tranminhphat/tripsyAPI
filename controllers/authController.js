@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const {
   loginErrorHandler,
   registerErrorHandler,
@@ -18,9 +19,9 @@ const userService = require("../services/userService");
 
 /* Controller for POST: /api/auth/login */
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   try {
-    const user = await User.login(email, password);
+    const user = await User.login(username, password);
     const token = createToken(user._id, JWT_SECRET);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     return res.status(200).json({ userId: user._id });

@@ -7,36 +7,6 @@ const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (token) {
-    jwt.verify(token, JWT_SECRET, (err, decodedToken) => {
-      if (err) {
-        res.status(400).json({
-          error: {
-            userMessage: "Token không hợp lệ",
-            internalMessage: "Invalid token",
-          },
-        });
-        next();
-      } else {
-        res.status(200).json({ decodedToken });
-        next();
-      }
-    });
-  } else {
-    res.status(400).json({
-      error: {
-        userMessage: "Token không tồn tại",
-        internalMessage: "Token is not existed",
-      },
-    });
-    next();
-  }
-};
-
-/* Check and send back the current user by jwt */
-const checkCurrentUser = (req, res, next) => {
-  const token = req.cookies.jwt;
-
-  if (token) {
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
       if (err) {
         res.status(400).json({
@@ -47,9 +17,19 @@ const checkCurrentUser = (req, res, next) => {
         });
         next();
       } else {
-        let user = await User.findById(decodedToken.id);
-        res.status(200).json({ user });
-        next();
+        try {
+          const user = await User.findById(decodedToken.id);
+          res.status(200).json({ user });
+          next();
+        } catch (err) {
+          res.status(400).json({
+            error: {
+              userMessage: "User không tồn tại",
+              internalMessage: "User is not existed",
+            },
+          });
+          next();
+        }
       }
     });
   } else {
@@ -63,4 +43,4 @@ const checkCurrentUser = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth, checkCurrentUser };
+module.exports = { requireAuth };

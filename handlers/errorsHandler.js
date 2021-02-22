@@ -13,15 +13,15 @@ exports.registerErrorHandler = (err) => {
 exports.loginErrorHandler = (err) => {
   let error = {};
 
-  if (err.message === "Invalid email") {
-    error.userMessage = "Email chưa được đăng ký";
-    error.internalMessage = "Email is not registered";
+  if (err.message === "Invalid user") {
+    error.userMessage = "User chưa được đăng ký";
+    error.internalMessage = "User is not registered";
 
     return error;
   }
 
   if (err.message === "Email is not verified") {
-    error.userMessage = "Email chưa được xác nhận";
+    error.userMessage = "Tài khoản chưa xác nhận email";
     error.internalMessage = "Email is not verified";
 
     return error;

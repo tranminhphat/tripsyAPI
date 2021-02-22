@@ -3,9 +3,8 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const config = require("./config");
 
-require("./models");
+const config = require("./config");
 const routes = require("./routes");
 
 const whitelist = config.CORS_WHITELIST;

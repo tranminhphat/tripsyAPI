@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const Role = mongoose.model("role");
+const Role = require("../models/Role");
 
 exports.getRoleByRoleName = async (roleName) => {
   return await Role.findOne({ roleName }).exec();

@@ -75,8 +75,8 @@ userSchema.pre("save", async function (next) {
 });
 
 /* Static method to login user */
-userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
+userSchema.statics.login = async function (username, password) {
+  const user = await this.findOne({ username });
   if (user) {
     if (user.isVerified) {
       const auth = await bcrypt.compare(password, user.password);
@@ -87,7 +87,7 @@ userSchema.statics.login = async function (email, password) {
     }
     throw new Error("Email is not verified");
   }
-  throw new Error("Invalid email");
+  throw new Error("Invalid user");
 };
 
 const User = mongoose.model("user", userSchema);
