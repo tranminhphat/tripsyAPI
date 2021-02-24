@@ -2,9 +2,13 @@ const userService = require("../services/userService");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 
+/* Controller for GET: /api/users */
+
+exports.getUsers = async (req, res) => {};
+
 /* Controller for GET: /api/users/id */
 
-exports.getUser = async (req, res) => {
+exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await userService.getUserById(id);
@@ -44,7 +48,7 @@ exports.getUser = async (req, res) => {
 
 /* Controller for PUT: /api/users/id */
 
-exports.updateUser = async (req, res) => {
+exports.updateUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await userService.getUserById(id);
