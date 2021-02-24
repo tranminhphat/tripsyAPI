@@ -12,7 +12,6 @@ exports.getCurrentUser = async (req, res) => {
     const fieldArray = fields.split(",");
     let fieldsUser = {};
     Object.keys(user._doc).map((key) => {
-      console.log(key);
       if (fieldArray.includes(key)) {
         fieldsUser[key] = user[key];
         return true;
@@ -26,7 +25,23 @@ exports.getCurrentUser = async (req, res) => {
 
 /* Controller for GET: /api/users */
 
-exports.getUsers = async (req, res) => {};
+exports.getUsers = async (req, res) => {
+  const filterArray = JSON.parse(req.query.filter);
+  const filterObject = serviceUtils.createFilteredUserObject(filterArray);
+
+  try {
+    const data = await userService.getUsers(filterObject);
+    return res.status(200).send(data);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Không tải được dữ liệu",
+        internalMessage: "Error occur when fetching data",
+      },
+    });
+  }
+};
 
 /* Controller for GET: /api/users/id */
 

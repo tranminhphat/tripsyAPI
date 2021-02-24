@@ -5,6 +5,10 @@ const axios = require("axios");
 
 const roleService = require("./roleService");
 
+exports.getUsers = (filterObj) => {
+  return await User.aggregate([{ $match: filterObj }]);
+}
+
 exports.getUserById = (id) => {
   const _id = mongoose.Types.ObjectId(id);
   return User.findById(_id);
