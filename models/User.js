@@ -55,13 +55,13 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Role",
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
     avatarUrl: {
       type: String,
       default: "",
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

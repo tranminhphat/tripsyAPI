@@ -9,37 +9,34 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
       if (err) {
-        res.status(400).json({
+        return res.status(400).json({
           error: {
             userMessage: "Token không hợp lệ",
             internalMessage: "Invalid token",
           },
         });
-        next();
       } else {
         try {
           const user = await User.findById(decodedToken.id);
-          res.status(200).json({ user });
+          req.user = user;
           next();
         } catch (err) {
-          res.status(400).json({
+          return res.status(400).json({
             error: {
               userMessage: "User không tồn tại",
               internalMessage: "User is not existed",
             },
           });
-          next();
         }
       }
     });
   } else {
-    res.status(400).json({
+    return res.status(400).json({
       error: {
         userMessage: "Token không tồn tại",
         internalMessage: "Token is not existed",
       },
     });
-    next();
   }
 };
 
