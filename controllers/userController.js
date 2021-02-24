@@ -2,6 +2,28 @@ const userService = require("../services/userService");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 
+/* Controller for GET: /api/users/me */
+
+exports.getCurrentUser = async (req, res) => {
+  const { fields } = req.query;
+  const user = req.user;
+
+  if (fields !== undefined) {
+    const fieldArray = fields.split(",");
+    let fieldsUser = {};
+    Object.keys(user._doc).map((key) => {
+      console.log(key);
+      if (fieldArray.includes(key)) {
+        fieldsUser[key] = user[key];
+        return true;
+      }
+    });
+    return res.status(200).json({ user: fieldsUser });
+  }
+
+  return res.status(200).json({ user });
+};
+
 /* Controller for GET: /api/users */
 
 exports.getUsers = async (req, res) => {};

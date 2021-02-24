@@ -3,10 +3,8 @@ const router = Router();
 const userController = require("../controllers/userController");
 const { requireAuth } = require("../middlewares/authMiddleware");
 
-router.get("/me", requireAuth, (req, res) => {
-  const user = req.user;
-  return res.status(200).json({ user });
-});
+router.get("/me", requireAuth, userController.getCurrentUser);
+router.get("/", userController.getUsers);
 router.get("/:id", userController.getUserById);
 router.put("/:id", userController.updateUserById);
 
