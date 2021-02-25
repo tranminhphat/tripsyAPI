@@ -59,6 +59,9 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    introduction: {
+      type: String,
+    },
     isVerified: {
       type: Boolean,
       default: false,

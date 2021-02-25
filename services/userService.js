@@ -5,9 +5,9 @@ const axios = require("axios");
 
 const roleService = require("./roleService");
 
-exports.getUsers = (filterObj) => {
+exports.getUsers = async (filterObj) => {
   return await User.aggregate([{ $match: filterObj }]);
-}
+};
 
 exports.getUserById = (id) => {
   const _id = mongoose.Types.ObjectId(id);
@@ -17,7 +17,10 @@ exports.getUserById = (id) => {
 exports.createUser = async (model) => {
   const { avatarBase64 } = model;
   const role = await roleService.getRoleByRoleName("user");
-  let userProperties = _.omit({ ...model, roleId: role._id }, ["avatarBase64"]);
+  let userProperties = _.omit(
+    { ...model, roleId: role._id, introduction: "" },
+    ["avatarBase64"]
+  );
   const user = await User.create(userProperties);
   user.save();
   if (avatarBase64) {
