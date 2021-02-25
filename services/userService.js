@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const User = mongoose.model("user");
+const User = require("../models/User");
 const _ = require("lodash");
 const axios = require("axios");
 
@@ -17,12 +17,9 @@ exports.getUserById = (id) => {
 exports.createUser = async (model) => {
   const { avatarBase64 } = model;
   const role = await roleService.getRoleByRoleName("user");
-  let userProperties = _.omit(
-    { ...model, roleId: role._id, introduction: "" },
-    ["avatarBase64"]
-  );
+  let userProperties = _.omit({ ...model, roleId: role._id }, ["avatarBase64"]);
   const user = await User.create(userProperties);
-  user.save();
+
   if (avatarBase64) {
     const { data } = await axios.post(
       "http://localhost:2004/api/upload/image",
