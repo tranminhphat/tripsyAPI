@@ -25,13 +25,11 @@ exports.getExperiences = async (req, res) => {
 
 exports.createExperience = async (req, res) => {
   const { _id } = req.user;
-  const { title } = req.body;
   try {
     const experience = await experienceService.createExperience({
       hostId: _id,
-      title,
     });
-    return res.status(201).json({ experience });
+    return res.status(201).send(experience.id);
   } catch (err) {
     console.log(err);
     return res.status(400).json({
@@ -42,3 +40,7 @@ exports.createExperience = async (req, res) => {
     });
   }
 };
+
+/* Controller for PUT: /api/experiences/id */
+
+exports.updateExperienceById = async (req, res) => {};

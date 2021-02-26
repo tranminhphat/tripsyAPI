@@ -9,8 +9,8 @@ const experienceSchema = new Schema(
     },
     title: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
   },
   { timestamps: true }

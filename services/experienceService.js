@@ -7,3 +7,9 @@ exports.getExperiences = async (filterObj) => {
 exports.createExperience = async (model) => {
   return await Experience.create(model);
 };
+
+exports.updateExperienceById = async (id, updatedProperties) => {
+  return await Experience.findByIdAndUpdate(id, updatedProperties, {
+    new: true,
+  });
+};
