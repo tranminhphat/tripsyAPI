@@ -21,6 +21,25 @@ exports.getExperiences = async (req, res) => {
   }
 };
 
+/* Controller for GET: /api/experiences/id */
+
+exports.getExperienceById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const experience = await experienceService.getExperienceById(id);
+    return res.status(200).json({ experience });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMessasge: "Trải nghiệm không tồn tại",
+        internalMessage: "Experience is not existed",
+      },
+    });
+  }
+};
+
 /* Controller for POST: /api/experiences */
 
 exports.createExperience = async (req, res) => {
@@ -43,4 +62,21 @@ exports.createExperience = async (req, res) => {
 
 /* Controller for PUT: /api/experiences/id */
 
-exports.updateExperienceById = async (req, res) => {};
+exports.updateExperienceById = async (req, res) => {
+  const { id } = req.params;
+  const { newProgress } = req.body;
+  try {
+    const experience = await experienceService.updateExperienceById(id, {
+      progress: newProgress,
+    });
+    return res.status(200).json();
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Lỗi trong khi cập nhật thông tin trải nghiệm",
+        internalMessage: "Error occur when updating experience information",
+      },
+    });
+  }
+};
