@@ -12,10 +12,6 @@ const experienceSchema = new Schema(
       trim: true,
       default: "",
     },
-    progress: {
-      type: Number,
-      default: 1,
-    },
   },
   { timestamps: true }
 );
