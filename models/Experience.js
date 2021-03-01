@@ -7,7 +7,17 @@ const experienceSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    theme: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     title: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    language: {
       type: String,
       trim: true,
       default: "",

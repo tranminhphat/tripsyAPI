@@ -64,12 +64,11 @@ exports.createExperience = async (req, res) => {
 
 exports.updateExperienceById = async (req, res) => {
   const { id } = req.params;
-  const { newProgress } = req.body;
   try {
     const experience = await experienceService.updateExperienceById(id, {
-      progress: newProgress,
+      ...req.body,
     });
-    return res.status(200).json();
+    return res.status(200).json({ experience });
   } catch (err) {
     console.log(err);
     return res.status(400).json({
