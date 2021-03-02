@@ -25,9 +25,19 @@ exports.getExperiences = async (req, res) => {
 
 exports.getExperienceById = async (req, res) => {
   const { id } = req.params;
+  const { fields } = req.query;
 
   try {
     const experience = await experienceService.getExperienceById(id);
+
+    if (fields) {
+      const returnFields = serviceUtils.createReturnFields(
+        experience._doc,
+        fields
+      );
+      return res.status(200).json({ experience: returnFields });
+    }
+
     return res.status(200).json({ experience });
   } catch (err) {
     console.log(err);

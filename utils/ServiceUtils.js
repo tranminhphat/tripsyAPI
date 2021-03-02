@@ -41,3 +41,17 @@ exports.createFilteredExperienceObject = (filterArray) => {
     return newFilterObject;
   }, {});
 };
+
+exports.createReturnFields = (data, fields) => {
+  const fieldArray = fields.split(",");
+  let returnFields = {};
+
+  Object.keys(data).map((key) => {
+    if (fieldArray.includes(key)) {
+      returnFields[key] = data[key];
+      return true;
+    }
+  });
+
+  return returnFields;
+};

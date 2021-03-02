@@ -1,4 +1,5 @@
 const userService = require("../services/userService");
+const serviceUtils = require("../utils/ServiceUtils");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
@@ -9,16 +10,9 @@ exports.getCurrentUser = async (req, res) => {
   const { fields } = req.query;
   const user = req.user;
 
-  if (fields !== undefined) {
-    const fieldArray = fields.split(",");
-    let fieldsUser = {};
-    Object.keys(user._doc).map((key) => {
-      if (fieldArray.includes(key)) {
-        fieldsUser[key] = user[key];
-        return true;
-      }
-    });
-    return res.status(200).json({ user: fieldsUser });
+  if (fields) {
+    const returnFields = serviceUtils.createReturnFields(user._doc, fields);
+    return res.status(200).json({ user: returnFields });
   }
 
   return res.status(200).json({ user });
@@ -48,6 +42,7 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
+  const { fields } = req.query;
   try {
     const user = await userService.getUserById(id);
 
@@ -58,6 +53,11 @@ exports.getUserById = async (req, res) => {
           internalMessage: "User is not existed",
         },
       });
+    }
+
+    if (fields) {
+      const returnFields = serviceUtils.createReturnFields(user._doc, fields);
+      return res.status(200).json({ user: returnFields });
     }
 
     return res.status(200).json(_.omit(user, ["password"]));
