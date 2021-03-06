@@ -12,10 +12,13 @@ const experienceSchema = new Schema(
       trim: true,
       default: "",
     },
-    title: {
-      type: String,
-      trim: true,
-      default: "",
+    location: {
+      type: Object,
+      default: {
+        location: "",
+        lat: "",
+        lng: "",
+      },
     },
     language: {
       type: String,
