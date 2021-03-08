@@ -17,3 +17,7 @@ exports.updateExperienceById = async (id, updatedProperties) => {
     new: true,
   });
 };
+
+exports.deleteExperienceById = async (id) => {
+  return await Experience.findByIdAndDelete(id);
+};

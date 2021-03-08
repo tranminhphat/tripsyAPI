@@ -89,3 +89,21 @@ exports.updateExperienceById = async (req, res) => {
     });
   }
 };
+
+/* Controller for DELETE: /api/experience/id */
+
+exports.deleteExperienceById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await experienceService.deleteExperienceById(id);
+    return res.status(200).json({ message: "Xóa thành công" });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Lỗi xảy ra khi xóa trải nghiệm",
+        internalMessage: "Error occur while deleting experience",
+      },
+    });
+  }
+};

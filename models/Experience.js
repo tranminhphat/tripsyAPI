@@ -14,16 +14,21 @@ const experienceSchema = new Schema(
     },
     location: {
       type: Object,
-      default: {
-        location: "",
-        lat: "",
-        lng: "",
-      },
+      default: null,
     },
     language: {
       type: String,
       trim: true,
       default: "",
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    address: {
+      type: Object,
+      default: null,
     },
   },
   { timestamps: true }
