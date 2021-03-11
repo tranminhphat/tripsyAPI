@@ -30,6 +30,14 @@ const experienceSchema = new Schema(
       type: Object,
       default: null,
     },
+    hostProvisions: {
+      type: Array,
+      default: null,
+    },
+    guestBrings: {
+      type: Array,
+      default: null,
+    },
   },
   { timestamps: true }
 );
