@@ -17,7 +17,6 @@ exports.getCities = (_, res) => {
 
 exports.getDistrictsByCityName = (req, res) => {
   const { cityName } = req.query;
-  console.log(cityName);
   const districts = locationData
     .filter((item) => item.Name === cityName)
     .map((item) => item.Districts)[0]

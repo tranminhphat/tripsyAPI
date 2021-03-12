@@ -38,6 +38,10 @@ const experienceSchema = new Schema(
       type: Array,
       default: null,
     },
+    title: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
