@@ -42,6 +42,10 @@ const experienceSchema = new Schema(
       type: String,
       default: "",
     },
+    photoGallery: {
+      type: Array,
+      default: null,
+    },
   },
   { timestamps: true }
 );

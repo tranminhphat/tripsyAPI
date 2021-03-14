@@ -1,5 +1,6 @@
 const experienceService = require("../services/experienceService");
 const serviceUtils = require("../utils/ServiceUtils");
+const axios = require("axios");
 
 /* Controller for GET: /api/experiences/ */
 
@@ -73,10 +74,33 @@ exports.createExperience = async (req, res) => {
 /* Controller for PUT: /api/experiences/id */
 
 exports.updateExperienceById = async (req, res) => {
+  const { _id } = req.user;
   const { id } = req.params;
+  let updatedProperties = { ...req.body };
+
+  console.log(updatedProperties.photoGallery);
+
+  if (updatedProperties.photoGallery) {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:2004/api/upload/gallery",
+        {
+          data: updatedProperties.photoGallery,
+          experienceId: id,
+          userId: _id,
+        }
+      );
+      updatedProperties = {
+        ...updatedProperties,
+        photoGallery: data.uploadedResponse,
+      };
+    } catch (err) {
+      console.error(err);
+    }
+  }
   try {
     const experience = await experienceService.updateExperienceById(id, {
-      ...req.body,
+      ...updatedProperties,
     });
     return res.status(200).json({ experience });
   } catch (err) {
