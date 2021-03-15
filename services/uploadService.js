@@ -11,6 +11,7 @@ exports.uploadUserAvatar = async (fileStr, userId) => {
   const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
     upload_preset: "user",
     folder: `users/${userId}/avatar`,
+    public_id: "userAvatar",
   });
   return uploadedResponse;
 };
@@ -22,20 +23,28 @@ exports.uploadExperienceGalleryPhotos = async (
 ) => {
   const uploadedResponse = [];
   for (let i = 0; i < gallery.length; i++) {
-    try {
-      const uploadedPhoto = await cloudinary.uploader.upload(
-        gallery[i].base64String,
-        {
-          upload_preset: "user",
-          folder: `users/${userId}/experience/${experienceId}/gallery`,
-        }
-      );
+    if (!gallery[i].url) {
+      try {
+        const uploadedPhoto = await cloudinary.uploader.upload(
+          gallery[i].base64String,
+          {
+            upload_preset: "user",
+            folder: `users/${userId}/experience/${experienceId}/gallery`,
+            public_id: gallery[i].type,
+          }
+        );
+        uploadedResponse.push({
+          type: gallery[i].type,
+          url: uploadedPhoto.secure_url,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
       uploadedResponse.push({
         type: gallery[i].type,
-        url: uploadedPhoto.secure_url,
+        url: gallery[i].url,
       });
-    } catch (err) {
-      console.error(err);
     }
   }
 

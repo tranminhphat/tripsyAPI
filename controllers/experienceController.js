@@ -78,8 +78,6 @@ exports.updateExperienceById = async (req, res) => {
   const { id } = req.params;
   let updatedProperties = { ...req.body };
 
-  console.log(updatedProperties.photoGallery);
-
   if (updatedProperties.photoGallery) {
     try {
       const { data } = await axios.post(
