@@ -46,6 +46,30 @@ const experienceSchema = new Schema(
       type: Array,
       default: null,
     },
+    groupSize: {
+      type: Number,
+      default: 0,
+    },
+    duration: {
+      type: Number,
+      default: 0,
+    },
+    startTime: {
+      type: String,
+      default: "",
+    },
+    pricing: {
+      type: Object,
+      default: null,
+    },
+    bookingDate: {
+      type: Number,
+      default: 1,
+    },
+    idCardNumber: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
