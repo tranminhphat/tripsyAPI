@@ -50,3 +50,22 @@ exports.uploadExperienceGalleryPhotos = async (
 
   return uploadedResponse;
 };
+
+exports.uploadIDCardPhotos = async (userId, idCard) => {
+  try {
+    await cloudinary.uploader.upload(idCard.front, {
+      upload_preset: "user",
+      folder: `users/${userId}/idcard/`,
+      public_id: "front-card",
+    });
+    await cloudinary.uploader.upload(idCard.back, {
+      upload_preset: "user",
+      folder: `users/${userId}/idcard/`,
+      public_id: "front-card",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+  return true;
+};

@@ -55,7 +55,11 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
-    isVerified: {
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isIdVerified: {
       type: Boolean,
       default: false,
     },
@@ -82,7 +86,7 @@ userSchema.pre("save", async function (next) {
 userSchema.statics.login = async function (username, password) {
   const user = await this.findOne({ username });
   if (user) {
-    if (user.isVerified) {
+    if (user.isEmailVerified) {
       const auth = await bcrypt.compare(password, user.password);
       if (auth) {
         return user;

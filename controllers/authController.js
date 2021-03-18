@@ -84,7 +84,7 @@ exports.resendEmailVerification = async (req, res) => {
 exports.verification = async (req, res) => {
   try {
     const { id } = jwt.verify(req.params.token, EMAIL_SECRET);
-    await userService.updateUserById(id, { isVerified: true });
+    await userService.updateUserById(id, { isEmailVerified: true });
     return res.status(200).json({
       userMessage: "Chúc mừng, địa chỉ email của bạn đã được xác nhận",
     });

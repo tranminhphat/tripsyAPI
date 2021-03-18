@@ -1,5 +1,6 @@
 const {
   uploadUserAvatar,
+  uploadIDCardPhotos,
   uploadExperienceGalleryPhotos,
 } = require("../services/uploadService");
 
@@ -34,6 +35,22 @@ exports.experienceGalleryPhotos = async (req, res) => {
       experienceId
     );
     return res.status(200).json({ uploadedResponse });
+  } catch (err) {
+    return res.status(500).json({
+      error: {
+        userMessage: "Xảy ra lỗi khi upload ảnh",
+        internalMessage: "Error occur while uploading image",
+      },
+    });
+  }
+};
+
+/* Controler for POST: /api/upload/idcard */
+exports.uploadIDCardPhotos = async (req, res) => {
+  try {
+    const { userId, idCard } = req.body;
+    const uploadedResponse = await uploadIDCardPhotos(userId, idCard);
+    return res.status(200).send(uploadedResponse);
   } catch (err) {
     return res.status(500).json({
       error: {

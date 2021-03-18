@@ -87,7 +87,7 @@ exports.updateUserById = async (req, res) => {
     }
 
     let updatedProperties = { ...req.body };
-    const { avatarUrl, password } = req.body;
+    const { avatarUrl, password, idCard } = req.body;
 
     if (avatarUrl) {
       const { data } = await axios.post(
@@ -104,6 +104,19 @@ exports.updateUserById = async (req, res) => {
       const salt = await bcrypt.genSalt();
       const newPassword = await bcrypt.hash(password, salt);
       updatedProperties = { ...updatedProperties, password: newPassword };
+    }
+
+    if (idCard) {
+      const { data } = await axios.post(
+        "http://localhost:2004/api/upload/idcard",
+        {
+          userId: id,
+          idCard,
+        }
+      );
+      if (data) {
+        updatedProperties = { ...updatedProperties, isIdVerified: true };
+      }
     }
 
     try {
