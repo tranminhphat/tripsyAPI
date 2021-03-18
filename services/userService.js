@@ -4,6 +4,7 @@ const _ = require("lodash");
 const axios = require("axios");
 
 const roleService = require("./roleService");
+const profileService = require("./profileService");
 
 exports.getUsers = async (filterObj) => {
   return await User.aggregate([{ $match: filterObj }]);
@@ -17,7 +18,11 @@ exports.getUserById = (id) => {
 exports.createUser = async (model) => {
   const { avatarBase64 } = model;
   const role = await roleService.getRoleByRoleName("user");
-  let userProperties = _.omit({ ...model, roleId: role._id }, ["avatarBase64"]);
+  const profile = await profileService.createProfile();
+  let userProperties = _.omit(
+    { ...model, roleId: role._id, profileId: profile._id },
+    ["avatarBase64"]
+  );
   const user = await User.create(userProperties);
 
   if (avatarBase64) {

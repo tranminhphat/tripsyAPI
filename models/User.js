@@ -51,20 +51,21 @@ const userSchema = new Schema(
     address: {
       type: String,
     },
-    roleId: {
-      type: Schema.Types.ObjectId,
-      ref: "Role",
-    },
     avatarUrl: {
       type: String,
       default: "",
     },
-    introduction: {
-      type: String,
-    },
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    roleId: {
+      type: Schema.Types.ObjectId,
+      ref: "Role",
+    },
+    profileId: {
+      type: Schema.Types.ObjectId,
+      ref: "Profile",
     },
   },
   { timestamps: true }
