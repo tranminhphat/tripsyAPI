@@ -66,9 +66,9 @@ const experienceSchema = new Schema(
       type: Number,
       default: 1,
     },
-    idCardNumber: {
-      type: String,
-      default: "",
+    availableDates: {
+      type: Array,
+      default: null,
     },
   },
   { timestamps: true }
