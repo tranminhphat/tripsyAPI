@@ -7,6 +7,10 @@ const profileSchema = new Schema(
       type: String,
       default: "",
     },
+    savedExperiences: {
+      type: Array,
+      default: null,
+    },
   },
   { timestamps: true }
 );
