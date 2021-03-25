@@ -54,10 +54,6 @@ const experienceSchema = new Schema(
       type: Number,
       default: 0,
     },
-    startTime: {
-      type: String,
-      default: "",
-    },
     pricing: {
       type: Object,
       default: null,
