@@ -5,17 +5,22 @@ const YOUR_DOMAIN = "http://localhost:3000";
 
 /* Controller for POST: /api/payment/create-booking-session */
 exports.createBookingSession = async (req, res) => {
+  const { metadata } = req.body;
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",
+    customer_email: metadata.customerEmail,
     line_items: [
       {
         price_data: {
           currency: "vnd",
+          unit_amount: metadata.price,
           product_data: {
-            name: "Stubborn Attachments",
+            name: metadata.name,
+            description: metadata.description,
+            images: [metadata.image[0].url],
           },
-          unit_amount: 20000000,
         },
         quantity: 1,
       },
