@@ -14,7 +14,7 @@ exports.getBookingSession = async (req, res) => {
 
 /* Controller for POST: /api/payment/booking */
 exports.createBookingSession = async (req, res) => {
-  const { experience, customer } = req.body.metadata;
+  const { receipt, experience, customer } = req.body.metadata;
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -35,7 +35,7 @@ exports.createBookingSession = async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${YOUR_DOMAIN}${experience.id}/confirm-booking/success?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${YOUR_DOMAIN}${experience.id}/confirm-booking/success?session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
     cancel_url: `${YOUR_DOMAIN}?canceled=true`,
   });
 
