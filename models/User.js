@@ -63,6 +63,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isPayOutEnabled: {
+      type: Boolean,
+      default: false,
+    },
     roleId: {
       type: Schema.Types.ObjectId,
       ref: "Role",
@@ -70,6 +74,10 @@ const userSchema = new Schema(
     profileId: {
       type: Schema.Types.ObjectId,
       ref: "Profile",
+    },
+    payoutAccountId: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }
