@@ -1,5 +1,9 @@
 const Receipt = require("../models/Receipt");
 
+exports.getReceipts = async (filterObj) => {
+  return await Receipt.aggregate([{ $match: filterObj }]);
+};
+
 exports.createReceipt = async (model) => {
   return await Receipt.create(model);
 };

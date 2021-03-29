@@ -1,4 +1,25 @@
 const receiptService = require("../services/receiptService");
+const serviceUtils = require("../utils/ServiceUtils");
+
+/* Controller for GET: /api/receipts */
+
+exports.getReceipts = async (req, res) => {
+  const filterArray = JSON.parse(req.query.filter);
+  const filterObject = serviceUtils.createFilteredReceiptObject(filterArray);
+
+  try {
+    const data = await receiptService.getReceipts(filterObject);
+    return res.status(200).send(data);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Không tải được dữ liệu",
+        internalMessage: "Error occur when fetching data",
+      },
+    });
+  }
+};
 
 /* Controller for POST: /api/receipts */
 

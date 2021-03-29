@@ -3,19 +3,25 @@ const stripe = require("stripe")(
 );
 
 /********* Account *********/
-/* Get account */
 exports.getAccountById = async (accountId) => {
   return await stripe.accounts.retrieve(accountId);
 };
 
-/* Create an Express account */
 exports.createAccount = async () => {
   return await stripe.accounts.create({
     type: "express",
   });
 };
 
-/* Create an account link */
 exports.createAccountLink = async (model) => {
   return await stripe.accountLinks.create(model);
+};
+
+/********* Checkout *********/
+exports.getCheckoutSessionById = async (sessionId) => {
+  return await stripe.checkout.sessions.retrieve(sessionId);
+};
+
+exports.createCheckoutSession = async (model) => {
+  return await stripe.checkout.sessions.create(model);
 };
