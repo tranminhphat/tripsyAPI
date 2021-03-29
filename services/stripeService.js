@@ -25,3 +25,14 @@ exports.getCheckoutSessionById = async (sessionId) => {
 exports.createCheckoutSession = async (model) => {
   return await stripe.checkout.sessions.create(model);
 };
+
+/********* Refund *********/
+exports.getRefundById = async (refundId) => {
+  return await stripe.refunds.retrieve(refundId);
+};
+
+exports.createRefund = async (paymentIntentId) => {
+  return await stripe.refunds.create({
+    payment_intent: paymentIntentId,
+  });
+};

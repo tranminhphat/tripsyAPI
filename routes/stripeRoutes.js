@@ -9,4 +9,7 @@ router.post("/accounts/:id/link", stripeController.createAccountLink);
 router.get("/checkout-session/:id", stripeController.getCheckoutSessionById);
 router.post("/checkout-session", stripeController.createCheckoutSession);
 
+router.get("/refunds/:id", stripeController.getRefundById);
+router.post("/refunds", stripeController.createRefund);
+
 module.exports = router;

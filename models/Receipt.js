@@ -14,6 +14,10 @@ const receiptSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  checkOutSessionId: {
+    type: String,
+    default: "",
+  },
   takePlace: {
     type: Object,
     default: null,

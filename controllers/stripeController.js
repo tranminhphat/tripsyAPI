@@ -41,16 +41,20 @@ exports.createAccountLink = async (req, res) => {
 };
 
 /*********** Checkout ***********/
-/* Controller for GET: api/checkout-session/:id */
+/* Controller for GET: api/stripe/checkout-session/:id */
 exports.getCheckoutSessionById = async (req, res) => {
   const { id } = req.params;
-  const session = await stripeService.getCheckoutSessionById(id);
-  if (session) {
-    return res.status(200).send(session.payment_status);
+  try {
+    const session = await stripeService.getCheckoutSessionById(id);
+    if (session) {
+      return res.status(200).json({ session });
+    }
+  } catch (err) {
+    console.error(err);
   }
 };
 
-/* Controller for POST: /api/checkout-session */
+/* Controller for POST: /api/stripe/checkout-session */
 exports.createCheckoutSession = async (req, res) => {
   const { receipt, experience, customer } = req.body.metadata;
 
@@ -78,4 +82,33 @@ exports.createCheckoutSession = async (req, res) => {
   });
 
   return res.status(200).json({ id: session.id });
+};
+
+/*********** Refund ***********/
+/* Controller for GET: /api/stripe/refunds/:id */
+exports.getRefundById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const refund = await stripeService.getRefundById(id);
+    if (refund) {
+      return res.status(200).send(refund);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/* Controller for POST: /api/stripe/refunds?payment_intent_id=id*/
+exports.createRefund = async (req, res) => {
+  const { payment_intent_id } = req.query;
+
+  try {
+    const refund = await stripeService.createRefund(payment_intent_id);
+    if (refund) {
+      return res.status(200).send(refund);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };
