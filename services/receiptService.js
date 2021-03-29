@@ -7,3 +7,7 @@ exports.createReceipt = async (model) => {
 exports.updateReceiptById = async (id, updatedProperties) => {
   return await Receipt.findByIdAndUpdate(id, updatedProperties, { new: true });
 };
+
+exports.deleteReceiptById = async (id) => {
+  return await Receipt.findByIdAndDelete(id);
+};

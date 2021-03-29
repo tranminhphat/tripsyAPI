@@ -39,3 +39,22 @@ exports.updateReceiptById = async (req, res) => {
     });
   }
 };
+
+/* Controller for DELETE: /api/receipts/:id */
+
+exports.deleteReceiptById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await receiptService.deleteReceiptById(id);
+    return res.status(200).send(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Lỗi trong khi xóa biên lai",
+        internalMessage: "Error occur when deleting receipt",
+      },
+    });
+  }
+};

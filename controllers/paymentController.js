@@ -35,8 +35,8 @@ exports.createBookingSession = async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${YOUR_DOMAIN}${experience.id}/confirm-booking/success?session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
-    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+    success_url: `${YOUR_DOMAIN}${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
+    cancel_url: `${YOUR_DOMAIN}${experience.id}/confirm-booking/response?status=cancelled&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
   });
 
   return res.status(200).json({ id: session.id });
