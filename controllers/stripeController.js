@@ -56,7 +56,7 @@ exports.getCheckoutSessionById = async (req, res) => {
 
 /* Controller for POST: /api/stripe/checkout-session */
 exports.createCheckoutSession = async (req, res) => {
-  const { receipt, experience, customer } = req.body.metadata;
+  const { activity, receipt, experience, customer } = req.body.metadata;
 
   const session = await stripeService.createCheckoutSession({
     payment_method_types: ["card"],
@@ -77,7 +77,7 @@ exports.createCheckoutSession = async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
+    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}&activity_id=${activity.id}`,
     cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=cancelled&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
   });
 
