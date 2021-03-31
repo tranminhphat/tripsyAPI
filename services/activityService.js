@@ -16,6 +16,16 @@ exports.updateActivityById = async (id, updatedProperties) => {
   return await Activity.findByIdAndUpdate(id, updatedProperties, { new: true });
 };
 
+exports.updateListOfGuestId = async (id, currentUserId, operator) => {
+  return await Activity.findByIdAndUpdate(
+    id,
+    {
+      [operator]: { listOfGuestId: currentUserId },
+    },
+    { new: true }
+  );
+};
+
 exports.deleteActivityById = async (id) => {
   return await Activity.findByIdAndDelete(id);
 };

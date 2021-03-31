@@ -11,3 +11,13 @@ exports.createProfile = async (model) => {
 exports.updateProfileById = async (id, updatedProperties) => {
   return await Profile.findByIdAndUpdate(id, updatedProperties, { new: true });
 };
+
+exports.savedExperience = async (id, experienceId, operator) => {
+  return await Profile.findByIdAndUpdate(
+    id,
+    {
+      [operator]: { savedExperiences: experienceId },
+    },
+    { new: true }
+  );
+};

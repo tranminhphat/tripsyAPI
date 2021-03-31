@@ -90,6 +90,31 @@ exports.updateActivityById = async (req, res) => {
   }
 };
 
+/* Controller for PUT: /api/activity/:id/update-guestlist */
+
+exports.updateListOfGuestId = async (req, res) => {
+  const { id } = req.params;
+  const { _id: userId } = req.user;
+
+  const activity = await activityService.getActivityById(id);
+
+  if (!activity) {
+    return res.status(404).send();
+  }
+
+  const listOfGuestId = activity.listOfGuestId.map((obj) => obj.toString());
+
+  const operator = listOfGuestId.includes(userId) ? "$pull" : "$addToSet";
+
+  try {
+    await activityService.updateListOfGuestId(id, userId, operator);
+    return res.status(200).send(operator === "$pull" ? false : true);
+  } catch (err) {
+    console.error(err);
+    return res.status(404).send();
+  }
+};
+
 /* Controller for DELETE: /api/activity/:id */
 
 exports.deleteActivityById = async (req, res) => {

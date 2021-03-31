@@ -7,10 +7,12 @@ const profileSchema = new Schema(
       type: String,
       default: "",
     },
-    savedExperiences: {
-      type: Array,
-      default: null,
-    },
+    savedExperiences: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Experience",
+      },
+    ],
   },
   { timestamps: true }
 );

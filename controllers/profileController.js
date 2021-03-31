@@ -66,3 +66,30 @@ exports.updateProfileById = async (req, res) => {
     });
   }
 };
+
+/* Controller for PUT: /api/profiles/id/save-experience/experienceId */
+exports.saveExperience = async (req, res) => {
+  const { id, experienceId } = req.params;
+
+  const profile = await profileService.getProfileById(id);
+
+  if (!profile) {
+    return res.status(404).send();
+  }
+
+  const savedExperiences = profile.savedExperiences.map((obj) =>
+    obj.toString()
+  );
+
+  const operator = savedExperiences.includes(experienceId)
+    ? "$pull"
+    : "$addToSet";
+
+  try {
+    await profileService.savedExperience(id, experienceId, operator);
+    return res.status(200).send(operator === "$pull" ? false : true);
+  } catch (err) {
+    console.error(err);
+    return res.status(404).send();
+  }
+};

@@ -10,6 +10,10 @@ const receiptSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Experience",
   },
+  activityId: {
+    type: Schema.Types.ObjectId,
+    ref: "Activity",
+  },
   guestId: {
     type: Schema.Types.ObjectId,
     ref: "User",

@@ -10,10 +10,12 @@ const activitySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Experience",
   },
-  listOfGuestId: {
-    type: Array,
-    default: [],
-  },
+  listOfGuestId: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   date: {
     type: Object,
     default: null,
