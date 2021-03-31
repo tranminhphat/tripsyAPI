@@ -36,3 +36,12 @@ exports.createRefund = async (paymentIntentId) => {
     payment_intent: paymentIntentId,
   });
 };
+
+/********* Transfer *********/
+exports.createTransfer = async (destination, amount) => {
+  return await stripe.transfers.create({
+    currency: "usd",
+    amount,
+    destination,
+  });
+};

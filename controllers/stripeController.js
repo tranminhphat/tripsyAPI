@@ -1,3 +1,5 @@
+const activityService = require("../services/activityService");
+const experienceService = require("../services/experienceService");
 const stripeService = require("../services/stripeService");
 const EXPERIENCE_HOSTING_URL = "http://localhost:3000/user/experience-hosting";
 const EXPERIENCE_PAGE_URL = "http://localhost:3000/experience";
@@ -107,6 +109,40 @@ exports.createRefund = async (req, res) => {
     const refund = await stripeService.createRefund(payment_intent_id);
     if (refund) {
       return res.status(200).send(refund);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/* Controller for POST: /api/stripe/transfers/:activityId */
+exports.createTransfer = async (req, res) => {
+  const { activityId } = req.params;
+  const { payoutAccountId } = req.user;
+
+  const activity = await activityService.getActivityById(activityId);
+  const experience = await experienceService.getExperienceById(
+    activity.experienceId
+  );
+
+  if (!activity || !experience || !payoutAccountId) {
+    return res.status(404).send();
+  }
+
+  console.log(experience.pricing.individualPrice);
+  console.log(activity.listOfGuestId.length);
+
+  const amount =
+    (experience.pricing.individualPrice * activity.listOfGuestId.length * 0.8) /
+    23000;
+
+  try {
+    const transfer = await stripeService.createTransfer(
+      payoutAccountId,
+      amount.toFixed(2) * 100
+    );
+    if (transfer) {
+      return res.status(200).send(transfer);
     }
   } catch (err) {
     console.error(err);
