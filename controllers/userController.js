@@ -140,3 +140,34 @@ exports.updateUserById = async (req, res) => {
     });
   }
 };
+
+/* Controller for PUT: /api/users/change-password */
+exports.changePassword = async (req, res) => {
+  const { _id: userId, password } = req.user;
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const isValid = await bcrypt.compare(currentPassword, password);
+    if (!isValid) {
+      return res.status(400).json({
+        error: {
+          userMessage: "Mật khẩu hiện tại không trùng khớp",
+          internalMessage: "Incorrect current password",
+        },
+      });
+    }
+
+    const salt = await bcrypt.genSalt();
+    const updatedPassword = await bcrypt.hash(newPassword, salt);
+    await userService.updateUserById(userId, { password: updatedPassword });
+    return res.status(200).send("Thay đổi mật khẩu thành công");
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMesesage: "Cập nhật thất bại",
+        internalMessage: "Updated fail",
+      },
+    });
+  }
+};

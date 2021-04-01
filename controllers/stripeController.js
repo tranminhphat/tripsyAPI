@@ -129,9 +129,6 @@ exports.createTransfer = async (req, res) => {
     return res.status(404).send();
   }
 
-  console.log(experience.pricing.individualPrice);
-  console.log(activity.listOfGuestId.length);
-
   const amount =
     (experience.pricing.individualPrice * activity.listOfGuestId.length * 0.8) /
     23000;

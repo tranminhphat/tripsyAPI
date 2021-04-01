@@ -55,7 +55,10 @@ exports.createFilteredReceiptObject = (filterArray) => {
     const newFilterObject = { ...filterObj };
     if (
       key === "hostId" ||
-      (key === "_id") | (key === "experienceId") | (key === "guestId")
+      key === "_id" ||
+      key === "experienceId" ||
+      key === "guestId" ||
+      key === "activityId"
     ) {
       newFilterObject[key] = mongoose.Types.ObjectId(value);
     } else {
