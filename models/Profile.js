@@ -13,6 +13,12 @@ const profileSchema = new Schema(
         ref: "Experience",
       },
     ],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
   },
   { timestamps: true }
 );
