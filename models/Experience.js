@@ -62,10 +62,6 @@ const experienceSchema = new Schema(
       type: Number,
       default: 1,
     },
-    availableDates: {
-      type: Array,
-      default: null,
-    },
   },
   { timestamps: true }
 );
