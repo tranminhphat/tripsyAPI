@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 exports.createFilteredUserObject = (filterArray) => {
-  if (filterArray.length === 0) {
+  if (!filterArray) {
     return {};
   }
 
@@ -22,7 +22,7 @@ exports.createFilteredUserObject = (filterArray) => {
 };
 
 exports.createFilteredExperienceObject = (filterArray) => {
-  if (filterArray.length === 0) {
+  if (!filterArray) {
     return {};
   }
 
@@ -43,7 +43,7 @@ exports.createFilteredExperienceObject = (filterArray) => {
 };
 
 exports.createFilteredReceiptObject = (filterArray) => {
-  if (filterArray.length === 0) {
+  if (!filterArray) {
     return {};
   }
 
@@ -70,7 +70,7 @@ exports.createFilteredReceiptObject = (filterArray) => {
 };
 
 exports.createFilteredActivityObject = (filterArray) => {
-  if (filterArray.length === 0) {
+  if (!filterArray) {
     return {};
   }
 
@@ -91,7 +91,7 @@ exports.createFilteredActivityObject = (filterArray) => {
 };
 
 exports.createFilteredReviewObject = (filterArray) => {
-  if (filterArray.length === 0) {
+  if (!filterArray) {
     return {};
   }
 
@@ -123,4 +123,19 @@ exports.createReturnFields = (data, fields) => {
   });
 
   return returnFields;
+};
+
+exports.createSortObject = (sortString) => {
+  if (!sortString) {
+    return { createdAt: -1 };
+  }
+
+  return sortString.split("|").reduce((sortObj, item) => {
+    const key = item.substr(1);
+    const value = item.charAt(0) === "-" ? -1 : 1;
+
+    const newSortObj = { ...sortObj };
+    newSortObj[key] = value;
+    return newSortObj;
+  }, {});
 };

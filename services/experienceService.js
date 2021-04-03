@@ -1,7 +1,10 @@
 const Experience = require("../models/Experience");
 
-exports.getExperiences = async (filterObj) => {
-  return await Experience.aggregate([{ $match: filterObj }]);
+exports.getExperiences = async (filterObj, sortObj) => {
+  return await Experience.aggregate([
+    { $match: filterObj },
+    { $sort: sortObj },
+  ]);
 };
 
 exports.getExperienceById = async (id) => {

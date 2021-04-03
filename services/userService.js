@@ -5,8 +5,8 @@ const axios = require("axios");
 const roleService = require("./roleService");
 const profileService = require("./profileService");
 
-exports.getUsers = async (filterObj) => {
-  return await User.aggregate([{ $match: filterObj }]);
+exports.getUsers = async (filterObj, sortObj) => {
+  return await User.aggregate([{ $match: filterObj }, { $sort: sortObj }]);
 };
 
 exports.getUserById = (id) => {

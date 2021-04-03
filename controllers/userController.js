@@ -21,11 +21,14 @@ exports.getCurrentUser = async (req, res) => {
 /* Controller for GET: /api/users */
 
 exports.getUsers = async (req, res) => {
-  const filterArray = JSON.parse(req.query.filter);
-  const filterObject = serviceUtils.createFilteredUserObject(filterArray);
+  const { filter, sort } = req.query;
+  const filterObject = serviceUtils.createFilteredActivityObject(
+    filter ? JSON.parse(filter) : null
+  );
+  const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await userService.getUsers(filterObject);
+    const data = await userService.getUsers(filterObject, sortObject);
     return res.status(200).send(data);
   } catch (err) {
     console.error(err);

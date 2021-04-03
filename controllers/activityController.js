@@ -4,11 +4,14 @@ const serviceUtils = require("../utils/ServiceUtils");
 /* Controller for GET: /api/activities */
 
 exports.getActivities = async (req, res) => {
-  const filterArray = JSON.parse(req.query.filter);
-  const filterObject = serviceUtils.createFilteredActivityObject(filterArray);
+  const { filter, sort } = req.query;
+  const filterObject = serviceUtils.createFilteredActivityObject(
+    filter ? JSON.parse(filter) : null
+  );
+  const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await activityService.getActivities(filterObject);
+    const data = await activityService.getActivities(filterObject, sortObject);
     return res.status(200).send(data);
   } catch (err) {
     console.error(err);

@@ -5,11 +5,17 @@ const axios = require("axios");
 /* Controller for GET: /api/experiences/ */
 
 exports.getExperiences = async (req, res) => {
-  const filterArray = JSON.parse(req.query.filter);
-  const filterObject = serviceUtils.createFilteredExperienceObject(filterArray);
+  const { filter, sort } = req.query;
+  const filterObject = serviceUtils.createFilteredActivityObject(
+    filter ? JSON.parse(filter) : null
+  );
+  const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await experienceService.getExperiences(filterObject);
+    const data = await experienceService.getExperiences(
+      filterObject,
+      sortObject
+    );
     return res.status(200).send(data);
   } catch (err) {
     console.error(err);

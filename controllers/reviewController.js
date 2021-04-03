@@ -3,11 +3,14 @@ const serviceUtils = require("../utils/ServiceUtils.js");
 
 /* Controller for GET: /api/reviews */
 exports.getReviews = async (req, res) => {
-  const filterArray = JSON.parse(req.query.filter);
-  const filterObject = serviceUtils.createFilteredReviewObject(filterArray);
+  const { filter, sort } = req.query;
+  const filterObject = serviceUtils.createFilteredActivityObject(
+    filter ? JSON.parse(filter) : null
+  );
+  const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await reviewService.getReviews(filterObject);
+    const data = await reviewService.getReviews(filterObject, sortObject);
     return res.status(200).send(data);
   } catch (err) {
     console.error(err);

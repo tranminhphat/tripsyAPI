@@ -1,26 +1,29 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const activitySchema = new Schema({
-  hostId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  experienceId: {
-    type: Schema.Types.ObjectId,
-    ref: "Experience",
-  },
-  listOfGuestId: [
-    {
+const activitySchema = new Schema(
+  {
+    hostId: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-  ],
-  date: {
-    type: Object,
-    default: null,
+    experienceId: {
+      type: Schema.Types.ObjectId,
+      ref: "Experience",
+    },
+    listOfGuestId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    date: {
+      type: Object,
+      default: null,
+    },
   },
-});
+  { timestamps: true }
+);
 
 const Activity = mongoose.model("activity", activitySchema);
 

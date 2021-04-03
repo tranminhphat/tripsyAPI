@@ -1,7 +1,7 @@
 const Review = require("../models/Review");
 
-exports.getReviews = async (filterObj) => {
-  return await Review.aggregate([{ $match: filterObj }]);
+exports.getReviews = async (filterObj, sortObj) => {
+  return await Review.aggregate([{ $match: filterObj }, { $sort: sortObj }]);
 };
 
 exports.createReview = async (model) => {
