@@ -42,7 +42,8 @@ exports.countReviews = async (filterObj) => {
     }
     return {
       totalItems: reviews.length,
-      averageStars: (averageStars / reviews.length).toFixed(2),
+      averageStars:
+        reviews.length !== 0 ? (averageStars / reviews.length).toFixed(2) : 0,
     };
   });
 };
