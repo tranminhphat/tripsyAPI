@@ -7,7 +7,7 @@ exports.getReviews = async (req, res) => {
   const { filter, sort } = req.query;
   const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
   const pageSize = parseInt(req.query.pageSize, 10) || 5;
-  const filterObject = serviceUtils.createFilteredActivityObject(
+  const filterObject = serviceUtils.createFilteredReviewObject(
     filter ? JSON.parse(filter) : null
   );
   const sortObject = serviceUtils.createSortObject(sort);
@@ -19,12 +19,11 @@ exports.getReviews = async (req, res) => {
       filterObject,
       sortObject
     );
-    console.log(reviews);
-    const totalItems = await reviewService.countReviews(filterObject);
+    const count = await reviewService.countReviews(filterObject);
 
     const data = {
       items: reviews,
-      pagination: new Pagination(pageNumber, pageSize, totalItems),
+      pagination: new Pagination(pageNumber, pageSize, count.totalItems),
     };
 
     return res.status(200).send(data);
