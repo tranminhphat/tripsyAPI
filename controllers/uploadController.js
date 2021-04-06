@@ -4,8 +4,8 @@ const {
   uploadExperienceGalleryPhotos,
 } = require("../services/uploadService");
 
-/* Controller for POST: /api/upload/image */
-exports.image = async (req, res) => {
+/* Controller for POST: /api/upload/avatar */
+exports.uploadUserAvatar = async (req, res) => {
   try {
     const fileStr = req.body.data;
     const userId = req.body.userId;

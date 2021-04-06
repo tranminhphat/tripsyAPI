@@ -89,41 +89,8 @@ exports.updateUserById = async (req, res) => {
       });
     }
 
-    let updatedProperties = { ...req.body };
-    const { avatarUrl, password, idCard } = req.body;
-
-    if (avatarUrl) {
-      const { data } = await axios.post(
-        "http://localhost:2004/api/upload/image",
-        {
-          data: avatarUrl,
-          userId: id,
-        }
-      );
-      updatedProperties = { ...updatedProperties, avatarUrl: data.imageUrl };
-    }
-
-    if (password) {
-      const salt = await bcrypt.genSalt();
-      const newPassword = await bcrypt.hash(password, salt);
-      updatedProperties = { ...updatedProperties, password: newPassword };
-    }
-
-    if (idCard) {
-      const { data } = await axios.post(
-        "http://localhost:2004/api/upload/idcard",
-        {
-          userId: id,
-          idCard,
-        }
-      );
-      if (data) {
-        updatedProperties = { ...updatedProperties, isIdVerified: true };
-      }
-    }
-
     try {
-      await userService.updateUserById(id, updatedProperties);
+      await userService.updateUserById(id, { ...req.body });
       return res.status(200).json({ userMessage: "Cập nhật thành công" });
     } catch (err) {
       console.log(err);
@@ -139,6 +106,44 @@ exports.updateUserById = async (req, res) => {
       error: {
         userMessage: "Người dùng không tồn tại",
         internalMessage: "User is not existed",
+      },
+    });
+  }
+};
+
+/* Controller for PUT: /api/users/change-avatar */
+exports.changeAvatar = async (req, res) => {
+  const { _id: userId } = req.user;
+  const { base64String } = req.body;
+
+  try {
+    const { data } = await axios.post(
+      "http://localhost:2004/api/upload/avatar",
+      {
+        data: base64String,
+        userId,
+      }
+    );
+    if (data) {
+      try {
+        await userService.updateUserById(userId, { avatarUrl: data.imageUrl });
+        return res.status(200).json({ userMessage: "Cập nhật thành công" });
+      } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+          error: {
+            userMesesage: "Cập nhật thất bại",
+            internalMessage: "Updated fail",
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMesesage: "Cập nhật thất bại",
+        internalMessage: "Updated fail",
       },
     });
   }
@@ -164,6 +169,43 @@ exports.changePassword = async (req, res) => {
     const updatedPassword = await bcrypt.hash(newPassword, salt);
     await userService.updateUserById(userId, { password: updatedPassword });
     return res.status(200).send("Thay đổi mật khẩu thành công");
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: {
+        userMesesage: "Cập nhật thất bại",
+        internalMessage: "Updated fail",
+      },
+    });
+  }
+};
+
+/* Controller for PUT: /api/users/verify-id */
+exports.verifyIdentity = async (req, res) => {
+  const { _id: userId } = req.user;
+  const { idCard } = req.body;
+  try {
+    const { data } = await axios.post(
+      "http://localhost:2004/api/upload/idcard",
+      {
+        userId,
+        idCard,
+      }
+    );
+    if (data) {
+      try {
+        await userService.updateUserById(userId, { isIdVerified: true });
+        return res.status(200).json({ userMessage: "Cập nhật thành công" });
+      } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+          error: {
+            userMesesage: "Cập nhật thất bại",
+            internalMessage: "Updated fail",
+          },
+        });
+      }
+    }
   } catch (err) {
     console.log(err);
     return res.status(400).json({
