@@ -7,6 +7,11 @@ router.get("/", experienceController.getExperiences);
 router.get("/:id", experienceController.getExperienceById);
 router.post("/", requireAuth, experienceController.createExperience);
 router.put("/:id", requireAuth, experienceController.updateExperienceById);
+router.put(
+  "/:id/update-gallery",
+  requireAuth,
+  experienceController.updatePhotoGallery
+);
 router.delete("/:id", requireAuth, experienceController.deleteExperienceById);
 
 module.exports = router;

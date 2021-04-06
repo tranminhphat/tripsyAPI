@@ -21,6 +21,14 @@ exports.updateExperienceById = async (id, updatedProperties) => {
   });
 };
 
+exports.updateGallery = async (id, photo) => {
+  return await Experience.findOneAndUpdate(
+    { _id: id, "photoGallery.type": photo.type },
+    { ["$set"]: { "photoGallery.$.url": photo.url } },
+    { new: true }
+  );
+};
+
 exports.deleteExperienceById = async (id) => {
   return await Experience.findByIdAndDelete(id);
 };

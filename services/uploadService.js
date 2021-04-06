@@ -51,6 +51,23 @@ exports.uploadExperienceGalleryPhotos = async (
   return uploadedResponse;
 };
 
+exports.uploadExperienceGalleryPhoto = async (photo, userId, experienceId) => {
+  try {
+    const uploadedPhoto = await cloudinary.uploader.upload(photo.base64String, {
+      upload_preset: "user",
+      folder: `users/${userId}/experience/${experienceId}/gallery`,
+      public_id: photo.type,
+    });
+    return {
+      type: photo.type,
+      url: uploadedPhoto.secure_url,
+    };
+  } catch (err) {
+    console.log("here");
+    console.error(err);
+  }
+};
+
 exports.uploadIDCardPhotos = async (userId, idCard) => {
   try {
     await cloudinary.uploader.upload(idCard.front, {

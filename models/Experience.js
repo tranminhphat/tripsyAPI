@@ -44,7 +44,15 @@ const experienceSchema = new Schema(
     },
     photoGallery: {
       type: Array,
-      default: null,
+      default: [
+        { type: "cover", url: "" },
+        { type: "host", url: "" },
+        { type: "action", url: "" },
+        { type: "details", url: "" },
+        { type: "location", url: "" },
+        { type: "miscellaneous1", url: "" },
+        { type: "miscellaneous2", url: "" },
+      ],
     },
     groupSize: {
       type: Number,
