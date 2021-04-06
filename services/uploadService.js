@@ -61,7 +61,7 @@ exports.uploadIDCardPhotos = async (userId, idCard) => {
     await cloudinary.uploader.upload(idCard.back, {
       upload_preset: "user",
       folder: `users/${userId}/idcard/`,
-      public_id: "front-card",
+      public_id: "back-card",
     });
   } catch (err) {
     console.log(err);
