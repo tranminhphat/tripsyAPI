@@ -34,6 +34,12 @@ exports.createFilteredExperienceObject = (filterArray) => {
     const newFilterObject = { ...filterObj };
     if (key === "hostId" || key === "_id") {
       newFilterObject[key] = mongoose.Types.ObjectId(value);
+    } else if (
+      key === "groupSize" ||
+      key === "duration" ||
+      key === "bookingDate"
+    ) {
+      newFilterObject[key] = Number(value);
     } else {
       newFilterObject[key] = value;
     }
