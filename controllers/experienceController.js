@@ -10,7 +10,6 @@ exports.getExperiences = async (req, res) => {
     filter ? JSON.parse(filter) : null
   );
 
-  console.log(filterObject);
   const sortObject = serviceUtils.createSortObject(sort);
 
   try {
@@ -18,7 +17,6 @@ exports.getExperiences = async (req, res) => {
       filterObject,
       sortObject
     );
-    console.log(data);
     return res.status(200).send(data);
   } catch (err) {
     console.error(err);

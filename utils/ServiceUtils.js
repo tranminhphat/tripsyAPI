@@ -39,7 +39,15 @@ exports.createFilteredExperienceObject = (filterArray) => {
       key === "duration" ||
       key === "bookingDate"
     ) {
-      newFilterObject[key] = Number(value);
+      newFilterObject[key] = { $gte: Number(value) };
+    } else if (key === "price") {
+      const split = value.split(",");
+      const minPrice = split[0];
+      const maxPrice = split[1];
+      newFilterObject["pricing.individualPrice"] = {
+        $gte: Number(minPrice) * 1000,
+        $lte: Number(maxPrice) * 1000,
+      };
     } else {
       newFilterObject[key] = value;
     }
