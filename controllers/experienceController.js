@@ -2,6 +2,23 @@ const experienceService = require("../services/experienceService");
 const serviceUtils = require("../utils/ServiceUtils");
 const axios = require("axios");
 
+exports.getExperiencesByDate = async (req, res) => {
+  const { dayOfYear } = req.params;
+  try {
+    const data = await experienceService.getExperiencesByDate(dayOfYear);
+    console.log(data);
+    return res.status(200).send(data);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Không tải được dữ liệu",
+        internalMessage: "Error occur when fetching data",
+      },
+    });
+  }
+};
+
 /* Controller for GET: /api/experiences/ */
 
 exports.getExperiences = async (req, res) => {

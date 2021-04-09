@@ -1,5 +1,28 @@
 const Experience = require("../models/Experience");
 
+const Activity = require("../models/Activity.js");
+
+exports.getExperiencesByDate = async (dayOfYear) => {
+  return await Activity.aggregate([
+    { $match: { "date.dateObject.dayOfYear": Number(dayOfYear) } },
+    {
+      $lookup: {
+        from: "experiences",
+        localField: "experienceId",
+        foreignField: "_id",
+        as: "experience",
+      },
+    },
+    { $unwind: "$experience" },
+    {
+      $project: {
+        _id: 0,
+        experience: 1,
+      },
+    },
+  ]);
+};
+
 exports.getExperiences = async (filterObj, sortObj) => {
   return await Experience.aggregate([
     { $match: filterObj },
