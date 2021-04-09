@@ -48,6 +48,8 @@ exports.createFilteredExperienceObject = (filterArray) => {
         $gte: Number(minPrice) * 1000,
         $lte: Number(maxPrice) * 1000,
       };
+    } else if (key === "location") {
+      newFilterObject["address.city"] = value;
     } else {
       newFilterObject[key] = value;
     }
