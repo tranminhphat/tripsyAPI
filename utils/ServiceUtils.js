@@ -50,6 +50,8 @@ exports.createFilteredExperienceObject = (filterArray) => {
       };
     } else if (key === "location") {
       newFilterObject["address.city"] = value;
+    } else if (key === "title") {
+      newFilterObject[key] = { $regex: `${value}`, $options: "i" };
     } else {
       newFilterObject[key] = value;
     }
