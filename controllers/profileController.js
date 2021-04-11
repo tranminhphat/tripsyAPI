@@ -1,4 +1,5 @@
 const profileService = require("../services/profileService");
+const themeService = require("../services/themeService");
 
 /* Controller for GET: /api/profiles/id */
 
@@ -91,5 +92,27 @@ exports.saveExperience = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(404).send();
+  }
+};
+
+/* Controller for PUT: /api/profiles/update-checkpoints */
+exports.updateCheckpoints = async (req, res) => {
+  const { profileId } = req.user;
+  const { themeId } = req.body;
+
+  try {
+    const profile = await profileService.getProfileById(profileId);
+    const [{ points }] = profile.checkpoints.filter(
+      (item) => item.themeId === themeId
+    );
+    if (points < 30) {
+      const update = await profileService.updateCheckpoints(profileId, themeId);
+      return res.status(200).send("hello");
+    }
+
+    return res.status(200).send("max");
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send();
   }
 };

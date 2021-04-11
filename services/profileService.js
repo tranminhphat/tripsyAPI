@@ -21,3 +21,16 @@ exports.savedExperience = async (id, experienceId, operator) => {
     { new: true }
   );
 };
+
+exports.updateCheckpoints = async (id, themeId) => {
+  return await Profile.findOneAndUpdate(
+    {
+      _id: id,
+      "checkpoints.themeId": themeId,
+    },
+    {
+      ["$inc"]: { "checkpoints.$.points": 10 },
+    },
+    { new: true }
+  );
+};

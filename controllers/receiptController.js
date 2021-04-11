@@ -5,7 +5,7 @@ const serviceUtils = require("../utils/ServiceUtils");
 
 exports.getReceipts = async (req, res) => {
   const { filter, sort } = req.query;
-  const filterObject = serviceUtils.createFilteredActivityObject(
+  const filterObject = serviceUtils.createFilteredReceiptObject(
     filter ? JSON.parse(filter) : null
   );
   const sortObject = serviceUtils.createSortObject(sort);

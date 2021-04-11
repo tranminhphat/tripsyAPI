@@ -2,6 +2,8 @@ const experienceService = require("../services/experienceService");
 const serviceUtils = require("../utils/ServiceUtils");
 const axios = require("axios");
 
+/* Controller for GET: /api/experiences/date/:dayOfYear */
+
 exports.getExperiencesByDate = async (req, res) => {
   const { dayOfYear } = req.params;
   try {
