@@ -102,15 +102,33 @@ exports.updateCheckpoints = async (req, res) => {
 
   try {
     const profile = await profileService.getProfileById(profileId);
-    const [{ points }] = profile.checkpoints.filter(
+    const theme = await themeService.getThemeById(themeId);
+    const [{ points: currentPoints }] = profile.checkpoints.filter(
       (item) => item.themeId === themeId
     );
-    if (points < 30) {
-      const update = await profileService.updateCheckpoints(profileId, themeId);
-      return res.status(200).send("hello");
+    if (currentPoints >= 100) {
+      return res.status(200).json({
+        theme: theme.value,
+        previousPoints: currentPoints,
+        currentPoints: currentPoints,
+      });
     }
 
-    return res.status(200).send("max");
+    const { checkpoints } = await profileService.updateCheckpoints(
+      profileId,
+      themeId
+    );
+    const [{ points: updatedPoints }] = checkpoints.filter(
+      (item) => item.themeId === themeId
+    );
+
+    return res
+      .status(200)
+      .json({
+        theme: theme.value,
+        previousPoints: currentPoints,
+        currentPoints: updatedPoints,
+      });
   } catch (err) {
     console.log(err);
     return res.status(400).send();
