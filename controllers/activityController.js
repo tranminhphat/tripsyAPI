@@ -12,7 +12,7 @@ exports.getActivities = async (req, res) => {
 
   try {
     const data = await activityService.getActivities(filterObject, sortObject);
-    return res.status(200).send(data);
+    return res.status(200).json({ activities: data });
   } catch (err) {
     console.error(err);
     return res.status(400).json({

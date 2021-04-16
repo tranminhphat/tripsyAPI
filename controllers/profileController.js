@@ -68,7 +68,7 @@ exports.updateProfileById = async (req, res) => {
   }
 };
 
-/* Controller for PUT: /api/profiles/id/save-experience/experienceId */
+/* Controller for PATCH: /api/profiles/id/save-experience/experienceId */
 exports.saveExperience = async (req, res) => {
   const { id, experienceId } = req.params;
 
@@ -122,13 +122,11 @@ exports.updateCheckpoints = async (req, res) => {
       (item) => item.themeId === themeId
     );
 
-    return res
-      .status(200)
-      .json({
-        theme: theme.value,
-        previousPoints: currentPoints,
-        currentPoints: updatedPoints,
-      });
+    return res.status(200).json({
+      theme: theme.value,
+      previousPoints: currentPoints,
+      currentPoints: updatedPoints,
+    });
   } catch (err) {
     console.log(err);
     return res.status(400).send();

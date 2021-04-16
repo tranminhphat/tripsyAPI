@@ -90,8 +90,8 @@ exports.updateUserById = async (req, res) => {
     }
 
     try {
-      await userService.updateUserById(id, { ...req.body });
-      return res.status(200).json({ userMessage: "Cập nhật thành công" });
+      const user = await userService.updateUserById(id, { ...req.body });
+      return res.status(200).json({ user });
     } catch (err) {
       console.log(err);
       return res.status(400).json({

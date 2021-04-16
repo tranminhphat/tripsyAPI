@@ -11,7 +11,7 @@ router.put(
   profileController.updateCheckpoints
 );
 router.put("/:id", requireAuth, profileController.updateProfileById);
-router.put(
+router.patch(
   "/:id/save-experience/:experienceId",
   requireAuth,
   profileController.saveExperience
