@@ -87,8 +87,12 @@ exports.saveExperience = async (req, res) => {
     : "$addToSet";
 
   try {
-    await profileService.savedExperience(id, experienceId, operator);
-    return res.status(200).send(operator === "$pull" ? false : true);
+    const profile = await profileService.savedExperience(
+      id,
+      experienceId,
+      operator
+    );
+    return res.status(200).json({ profile });
   } catch (err) {
     console.error(err);
     return res.status(404).send();

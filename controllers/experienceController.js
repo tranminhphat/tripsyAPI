@@ -32,11 +32,11 @@ exports.getExperiences = async (req, res) => {
   const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await experienceService.getExperiences(
+    const experiences = await experienceService.getExperiences(
       filterObject,
       sortObject
     );
-    return res.status(200).send(data);
+    return res.status(200).json({ experiences });
   } catch (err) {
     console.error(err);
     return res.status(400).json({

@@ -11,8 +11,8 @@ exports.getReceipts = async (req, res) => {
   const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await receiptService.getReceipts(filterObject, sortObject);
-    return res.status(200).send(data);
+    const receipts = await receiptService.getReceipts(filterObject, sortObject);
+    return res.status(200).json({ receipts });
   } catch (err) {
     console.error(err);
     return res.status(400).json({
