@@ -1,7 +1,19 @@
 const Activity = require("../models/Activity.js");
 
 exports.getActivities = async (filterObj, sortObj) => {
-  return await Activity.aggregate([{ $match: filterObj }, { $sort: sortObj }]);
+  return await Activity.aggregate([
+    { $match: filterObj },
+    {
+      $lookup: {
+        from: "experiences",
+        localField: "experienceId",
+        foreignField: "_id",
+        as: "experience",
+      },
+    },
+    { $unwind: "$experience" },
+    { $sort: sortObj },
+  ]);
 };
 
 exports.getActivityById = async (id) => {
