@@ -12,6 +12,14 @@ exports.getActivities = async (filterObj, sortObj) => {
       },
     },
     { $unwind: "$experience" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "listOfGuestId",
+        foreignField: "_id",
+        as: "guestsInfo",
+      },
+    },
     { $sort: sortObj },
   ]);
 };
