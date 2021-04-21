@@ -1,0 +1,96 @@
+[
+  {
+    "avatarUrl": "https://res.cloudinary.com/tranminhphat/image/upload/v1618069025/users/60536834cf201b200c0418e9/avatar/userAvatar.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": true,
+    "firstName": "Phat",
+    "lastName": "Tran Minh",
+    "email": "phattm204@gmail.com",
+    "username": "admin1",
+    "password": "123456",
+    "gender": "male",
+    "dateOfBirth":"1999-04-20T00:00:00.000Z",
+    "phoneNumber": "0909771795",
+    "address": "2/22 Le Thuc Hoach"
+},
+{
+    "avatarUrl": "https://res.cloudinary.com/tranminhphat/image/upload/v1617007978/users/606195636cc6df2f8493dc60/avatar/userAvatar.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": false,
+    "firstName": "Hằng",
+    "lastName": "Lê Nữ Việt",
+    "email": "a17522004@gmail.com",
+    "username": "user01",
+    "password": "123456",
+    "gender": "female",
+    "dateOfBirth": 
+       "1999-04-11T00:00:00.000"
+    ,
+    "phoneNumber": "0909771795",
+    "address": "Sacramento, California, USA"
+},
+{
+    "avatarUrl": "https://randomuser.me/api/portraits/men/75.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": false,
+    "firstName": "An",
+    "lastName": "Trần Văn",
+    "email": "random1@gmail.com",
+    "username": "user02",
+    "password": "123456",
+    "gender": "male",
+    "dateOfBirth": 
+        "1999-04-11T00:00:00.000Z"
+    ,
+    "phoneNumber": "0909771795",
+    "address": "An Giang, Viet Nam"
+},
+{
+    "avatarUrl": "https://randomuser.me/api/portraits/women/75.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": false,
+    "firstName": "Bình",
+    "lastName": "Nguyễn Thị",
+    "email": "random2@gmail.com",
+    "username": "user03",
+    "password": "123456",
+    "gender": "female",
+    "dateOfBirth": 
+        "1999-04-11T00:00:00.000Z"
+    ,
+    "phoneNumber": "0909771795",
+    "address": "Ha Noi, Viet Nam"
+},
+{
+    "avatarUrl": "https://randomuser.me/api/portraits/men/75.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": false,
+    "firstName": "Cường",
+    "lastName": "Hồ Văn",
+    "email": "random3@gmail.com",
+    "username": "user04",
+    "password": "123456",
+    "gender": "male",
+    "dateOfBirth": 
+        "1999-04-11T00:00:00.000Z"
+    ,
+    "phoneNumber": "0909771795",
+    "address": "Soc Trang, Viet Nam"
+},
+{
+    "avatarUrl": "https://randomuser.me/api/portraits/men/73.jpg",
+    "isEmailVerified": true,
+    "isIdVerified": false,
+    "firstName": "Dũng",
+    "lastName": "Lê Văn",
+    "email": "random4@gmail.com",
+    "username": "user05",
+    "password": "123456",
+    "gender": "male",
+    "dateOfBirth": 
+        "1999-04-11T00:00:00.000Z"
+    ,
+    "phoneNumber": "0909771795",
+    "address": "Ha Giang, Viet Nam"
+}
+]

@@ -1,0 +1,9 @@
+[{
+  "roleName": "admin"
+},
+{
+  "roleName": "moderator"
+},
+{
+  "roleName": "user"
+}]
