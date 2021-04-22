@@ -41,7 +41,7 @@ exports.getActivityById = async (req, res) => {
       return res.status(200).json({ activity: returnFields });
     }
 
-    return res.status(200).json({ activity });
+    return res.status(200).json({ activity: activity });
   } catch (err) {
     console.log(err);
     return res.status(400).json({

@@ -1,6 +1,8 @@
 const activityService = require("../services/activityService");
 const experienceService = require("../services/experienceService");
+const receiptService = require("../services/receiptService");
 const stripeService = require("../services/stripeService");
+const notificationService = require("../services/notificationService");
 const EXPERIENCE_HOSTING_URL = "http://localhost:3000/user/experience-hosting";
 const EXPERIENCE_PAGE_URL = "http://localhost:3000/experience";
 
@@ -43,11 +45,58 @@ exports.createAccountLink = async (req, res) => {
 };
 
 /*********** Checkout ***********/
+/* Controller for POST: api/stripe/update-checkout/:id */
+exports.updateCheckoutSession = async (req, res) => {
+  const { id } = req.params;
+  const { status, activityId, receiptId } = req.body;
+  const user = req.user;
+
+  try {
+    if (status === "succeed") {
+      const session = await stripeService.getCheckoutSessionById(id);
+      if (session.payment_status === "paid") {
+        await receiptService.updateReceiptById(receiptId, {
+          status: "paid",
+          checkOutSessionId: id,
+        });
+        const activity = await activityService.getActivityById(activityId);
+
+        const experience = await experienceService.getExperienceById(
+          activity.experienceId
+        );
+
+        await notificationService.createNotification({
+          receiverId: experience.hostId,
+          message: `${user.lastName} ${user.firstName} đã đặt trước trải nghiệm ${experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} của bạn`,
+          link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
+        });
+      }
+    } else {
+      await receiptService.deleteReceiptById(receiptId);
+      const experience = await experienceService.getExperienceById(
+        experienceId
+      );
+      const activity = await activityService.getActivityById(activityId);
+      const user = await getUserById(userId);
+      await notificationService.createNotification({
+        receiverId: experience.hostId,
+        message: `${user.lastName} ${user.firstName} đã hủy trải nghiệm ${experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} của bạn`,
+        link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
+      });
+    }
+
+    return res.status(200).json({});
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({});
+  }
+};
 /* Controller for GET: api/stripe/checkout-session/:id */
 exports.getCheckoutSessionById = async (req, res) => {
   const { id } = req.params;
   try {
     const session = await stripeService.getCheckoutSessionById(id);
+    console.log(session);
     if (session) {
       return res.status(200).json({ session });
     }

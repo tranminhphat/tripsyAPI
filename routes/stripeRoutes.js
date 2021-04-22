@@ -9,6 +9,11 @@ router.post("/accounts/:id/link", stripeController.createAccountLink);
 
 router.get("/checkout-session/:id", stripeController.getCheckoutSessionById);
 router.post("/checkout-session", stripeController.createCheckoutSession);
+router.post(
+  "/update-checkout/:id",
+  requireAuth,
+  stripeController.updateCheckoutSession
+);
 
 router.get("/refunds/:id", stripeController.getRefundById);
 router.post("/refunds", stripeController.createRefund);

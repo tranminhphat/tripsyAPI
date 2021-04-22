@@ -23,6 +23,10 @@ const notificationSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    link: {
+      type: String,
+      default: "/",
+    },
   },
   { timestamps: true }
 );

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Activity = require("../models/Activity.js");
 
 exports.getActivities = async (filterObj, sortObj) => {
@@ -25,7 +26,28 @@ exports.getActivities = async (filterObj, sortObj) => {
 };
 
 exports.getActivityById = async (id) => {
-  return await Activity.findById(id);
+  return (
+    await Activity.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(id) } },
+      {
+        $lookup: {
+          from: "experiences",
+          localField: "experienceId",
+          foreignField: "_id",
+          as: "experience",
+        },
+      },
+      { $unwind: "$experience" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "listOfGuestId",
+          foreignField: "_id",
+          as: "guestsInfo",
+        },
+      },
+    ])
+  )[0];
 };
 
 exports.createActivity = async (model) => {

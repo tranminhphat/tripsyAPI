@@ -59,7 +59,7 @@ exports.createReview = async (req, res) => {
 /* Controller for GET: /api/reviews/count */
 exports.countReviews = async (req, res) => {
   const { filter } = req.query;
-  const filterObject = serviceUtils.createFilteredActivityObject(
+  const filterObject = serviceUtils.createFilteredReviewObject(
     filter ? JSON.parse(filter) : null
   );
 
