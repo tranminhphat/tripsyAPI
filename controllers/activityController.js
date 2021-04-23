@@ -107,7 +107,9 @@ exports.updateListOfGuestId = async (req, res) => {
 
   const listOfGuestId = activity.listOfGuestId.map((obj) => obj.toString());
 
-  const operator = listOfGuestId.includes(userId) ? "$pull" : "$addToSet";
+  const operator = listOfGuestId.includes(userId.toString())
+    ? "$pull"
+    : "$addToSet";
 
   try {
     await activityService.updateListOfGuestId(id, userId, operator);
