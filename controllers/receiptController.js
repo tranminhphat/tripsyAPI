@@ -24,6 +24,25 @@ exports.getReceipts = async (req, res) => {
   }
 };
 
+/* Controller for GET: /api/receipts/:id */
+
+exports.getReceiptById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const receipt = await receiptService.getReceiptById(id);
+    return res.status(200).json({ receipt });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({
+      error: {
+        userMessage: "Không tải được dữ liệu",
+        internalMessage: "Error occur when fetching data",
+      },
+    });
+  }
+};
+
 /* Controller for POST: /api/receipts */
 
 exports.createReceipt = async (req, res) => {

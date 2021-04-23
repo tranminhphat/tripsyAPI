@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Receipt = require("../models/Receipt");
 
 exports.getReceipts = async (filterObj, sortObj) => {
@@ -32,6 +33,42 @@ exports.getReceipts = async (filterObj, sortObj) => {
     { $unwind: "$host" },
     { $sort: sortObj },
   ]);
+};
+
+exports.getReceiptById = async (receiptId) => {
+  return (
+    await Receipt.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(receiptId) } },
+      {
+        $lookup: {
+          from: "experiences",
+          localField: "experienceId",
+          foreignField: "_id",
+          as: "experience",
+        },
+      },
+      { $unwind: "$experience" },
+      {
+        $lookup: {
+          from: "activities",
+          localField: "activityId",
+          foreignField: "_id",
+          as: "activity",
+        },
+      },
+      { $unwind: "$activity" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "hostId",
+          foreignField: "_id",
+          as: "host",
+        },
+      },
+      { $unwind: "$host" },
+      { $sort: sortObj },
+    ])
+  )[0];
 };
 
 exports.createReceipt = async (model) => {

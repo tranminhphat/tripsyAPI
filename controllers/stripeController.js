@@ -71,18 +71,21 @@ exports.updateCheckoutSession = async (req, res) => {
           link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
         });
       }
-    } else {
+    } else if (status === "cancel") {
       await receiptService.deleteReceiptById(receiptId);
-      const experience = await experienceService.getExperienceById(
-        experienceId
-      );
       const activity = await activityService.getActivityById(activityId);
-      const user = await getUserById(userId);
+
+      const experience = await experienceService.getExperienceById(
+        activity.experienceId
+      );
+
       await notificationService.createNotification({
         receiverId: experience.hostId,
         message: `${user.lastName} ${user.firstName} đã hủy trải nghiệm ${experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} của bạn`,
         link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
       });
+    } else {
+      await receiptService.deleteReceiptById(receiptId);
     }
 
     return res.status(200).json({});
@@ -96,7 +99,6 @@ exports.getCheckoutSessionById = async (req, res) => {
   const { id } = req.params;
   try {
     const session = await stripeService.getCheckoutSessionById(id);
-    console.log(session);
     if (session) {
       return res.status(200).json({ session });
     }
@@ -128,7 +130,7 @@ exports.createCheckoutSession = async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}&activity_id=${activity.id}`,
+    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
     cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=cancelled&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
   });
 

@@ -4,6 +4,7 @@ const { requireAuth } = require("../middlewares/authMiddleware");
 const receiptController = require("../controllers/receiptController");
 
 router.get("/", requireAuth, receiptController.getReceipts);
+router.get("/:id", requireAuth, receiptController.getReceiptById);
 router.post("/", requireAuth, receiptController.createReceipt);
 router.put("/:id", requireAuth, receiptController.updateReceiptById);
 router.delete("/:id", requireAuth, receiptController.deleteReceiptById);
