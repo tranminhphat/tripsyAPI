@@ -66,7 +66,6 @@ exports.getReceiptById = async (receiptId) => {
         },
       },
       { $unwind: "$host" },
-      { $sort: sortObj },
     ])
   )[0];
 };

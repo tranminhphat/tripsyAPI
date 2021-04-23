@@ -45,55 +45,6 @@ exports.createAccountLink = async (req, res) => {
 };
 
 /*********** Checkout ***********/
-/* Controller for POST: api/stripe/update-checkout/:id */
-exports.updateCheckoutSession = async (req, res) => {
-  const { id } = req.params;
-  const { status, activityId, receiptId } = req.body;
-  const user = req.user;
-
-  try {
-    if (status === "succeed") {
-      const session = await stripeService.getCheckoutSessionById(id);
-      if (session.payment_status === "paid") {
-        await receiptService.updateReceiptById(receiptId, {
-          status: "paid",
-          checkOutSessionId: id,
-        });
-        const activity = await activityService.getActivityById(activityId);
-
-        const experience = await experienceService.getExperienceById(
-          activity.experienceId
-        );
-
-        await notificationService.createNotification({
-          receiverId: experience.hostId,
-          message: `${user.lastName} ${user.firstName} đã đặt trước trải nghiệm ${experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} của bạn`,
-          link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
-        });
-      }
-    } else if (status === "cancel") {
-      await receiptService.deleteReceiptById(receiptId);
-      const activity = await activityService.getActivityById(activityId);
-
-      const experience = await experienceService.getExperienceById(
-        activity.experienceId
-      );
-
-      await notificationService.createNotification({
-        receiverId: experience.hostId,
-        message: `${user.lastName} ${user.firstName} đã hủy trải nghiệm ${experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} của bạn`,
-        link: `/user/experience-hosting/${experience._id}/activation/${activity._id}`,
-      });
-    } else {
-      await receiptService.deleteReceiptById(receiptId);
-    }
-
-    return res.status(200).json({});
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({});
-  }
-};
 /* Controller for GET: api/stripe/checkout-session/:id */
 exports.getCheckoutSessionById = async (req, res) => {
   const { id } = req.params;
@@ -130,8 +81,8 @@ exports.createCheckoutSession = async (req, res) => {
         quantity: 1,
       },
     ],
-    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
-    cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=cancelled&session_id={CHECKOUT_SESSION_ID}&receipt_id=${receipt.id}`,
+    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&sessionId={CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
+    cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=failed&sessionId=$CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
   });
 
   return res.status(200).json({ id: session.id });
