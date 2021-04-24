@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Notification = require("../models/Notification");
 
 exports.createNotification = async (model) => {
@@ -5,7 +6,16 @@ exports.createNotification = async (model) => {
 };
 
 exports.getNotificationsByUserId = async (receiverId) => {
-  return await Notification.find({ receiverId });
+  return await Notification.aggregate([
+    {
+      $match: { receiverId: mongoose.Types.ObjectId(receiverId) },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+  ]);
 };
 
 exports.markAllAsRead = async () => {
