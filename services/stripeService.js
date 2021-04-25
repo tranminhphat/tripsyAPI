@@ -2,6 +2,13 @@ const stripe = require("stripe")(
   "sk_test_51IXjZvDcrQRGXIG6bRiF2kdXHW7FLUjXAQ8tjMSxuu6QIC8Izi1yxTcVI9MJk3kp45crg80hn8IqbfTreXcSMyLN0014iZUAnk"
 );
 
+/********* Balance *********/
+exports.getBalanceByAccountId = async (accountId) => {
+  return await stripe.balance.retrieve({
+    stripeAccount: accountId,
+  });
+};
+
 /********* Account *********/
 exports.getAccountById = async (accountId) => {
   return await stripe.accounts.retrieve(accountId);

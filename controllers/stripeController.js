@@ -1,11 +1,21 @@
 const activityService = require("../services/activityService");
 const experienceService = require("../services/experienceService");
-const receiptService = require("../services/receiptService");
 const stripeService = require("../services/stripeService");
-const notificationService = require("../services/notificationService");
 const EXPERIENCE_HOSTING_URL = "http://localhost:3000/user/experience-hosting";
 const EXPERIENCE_PAGE_URL = "http://localhost:3000/experience";
 
+/*********** Balance ***********/
+/* Controller for GET: /api/stripe/balance/:accountId */
+exports.getBalanceByAccountId = async (req, res) => {
+  const { accountId } = req.params;
+  try {
+    const balance = await stripeService.getBalanceByAccountId(accountId);
+    return res.status(200).json({ balance });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({});
+  }
+};
 /*********** Account ***********/
 /* Controller for GET: /api/stripe/accounts/:id */
 exports.getAccountById = async (req, res) => {
@@ -15,6 +25,7 @@ exports.getAccountById = async (req, res) => {
     return res.status(200).json({ account });
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -25,6 +36,7 @@ exports.createAccount = async (_, res) => {
     return res.status(200).send(account.id);
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -41,6 +53,7 @@ exports.createAccountLink = async (req, res) => {
     return res.status(200).send(accountLink.url);
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -55,6 +68,7 @@ exports.getCheckoutSessionById = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -62,30 +76,35 @@ exports.getCheckoutSessionById = async (req, res) => {
 exports.createCheckoutSession = async (req, res) => {
   const { activity, receipt, experience, customer } = req.body.metadata;
 
-  const session = await stripeService.createCheckoutSession({
-    payment_method_types: ["card"],
-    mode: "payment",
-    client_reference_id: customer.customerId,
-    customer_email: customer.customerEmail,
-    line_items: [
-      {
-        price_data: {
-          currency: "vnd",
-          unit_amount: experience.price,
-          product_data: {
-            name: experience.name,
-            description: experience.description,
-            images: [experience.image[0].url],
+  try {
+    const session = await stripeService.createCheckoutSession({
+      payment_method_types: ["card"],
+      mode: "payment",
+      client_reference_id: customer.customerId,
+      customer_email: customer.customerEmail,
+      line_items: [
+        {
+          price_data: {
+            currency: "vnd",
+            unit_amount: experience.price,
+            product_data: {
+              name: experience.name,
+              description: experience.description,
+              images: [experience.image[0].url],
+            },
           },
+          quantity: 1,
         },
-        quantity: 1,
-      },
-    ],
-    success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&sessionId={CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
-    cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=failed&sessionId=$CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
-  });
+      ],
+      success_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=succeed&sessionId={CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
+      cancel_url: `${EXPERIENCE_PAGE_URL}/${experience.id}/confirm-booking/response?status=failed&sessionId=$CHECKOUT_SESSION_ID}&receiptId=${receipt.id}&activityId=${activity.id}`,
+    });
 
-  return res.status(200).json({ id: session.id });
+    return res.status(200).json({ id: session.id });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({});
+  }
 };
 
 /*********** Refund ***********/
@@ -100,6 +119,7 @@ exports.getRefundById = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -114,6 +134,7 @@ exports.createRefund = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };
 
@@ -145,5 +166,6 @@ exports.createTransfer = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    return res.status(400).json({});
   }
 };

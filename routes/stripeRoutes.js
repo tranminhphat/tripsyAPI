@@ -19,4 +19,6 @@ router.post(
   stripeController.createTransfer
 );
 
+router.get("/balance/:accountId", stripeController.getBalanceByAccountId);
+
 module.exports = router;
