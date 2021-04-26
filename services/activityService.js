@@ -3,7 +3,6 @@ const Activity = require("../models/Activity.js");
 
 exports.getActivities = async (filterObj, sortObj) => {
   return await Activity.aggregate([
-    { $match: filterObj },
     {
       $lookup: {
         from: "experiences",
@@ -13,6 +12,7 @@ exports.getActivities = async (filterObj, sortObj) => {
       },
     },
     { $unwind: "$experience" },
+    { $match: filterObj },
     {
       $lookup: {
         from: "users",

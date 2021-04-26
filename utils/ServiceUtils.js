@@ -98,7 +98,12 @@ exports.createFilteredActivityObject = (filterArray) => {
     const value = splitedItem[1];
 
     const newFilterObject = { ...filterObj };
-    if (key === "hostId" || (key === "_id") | (key === "experienceId")) {
+    if (
+      key === "hostId" ||
+      key === "_id" ||
+      key === "experienceId" ||
+      key === "experience.hostId"
+    ) {
       newFilterObject[key] = mongoose.Types.ObjectId(value);
     } else {
       newFilterObject[key] = value;
