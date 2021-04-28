@@ -70,6 +70,13 @@ const experienceSchema = new Schema(
       type: Number,
       default: 1,
     },
+    review: {
+      type: Object,
+      default: {
+        totalItems: 0,
+        averageStars: 0,
+      },
+    },
   },
   { timestamps: true }
 );
