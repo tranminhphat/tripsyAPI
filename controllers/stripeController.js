@@ -152,9 +152,10 @@ exports.createTransfer = async (req, res) => {
     return res.status(404).send();
   }
 
-  const amount =
+  const amount = Math.round(
     (experience.pricing.individualPrice * activity.listOfGuestId.length * 0.8) /
-    23000;
+      23000
+  );
 
   try {
     const transfer = await stripeService.createTransfer(

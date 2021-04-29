@@ -21,6 +21,10 @@ const activitySchema = new Schema(
       type: Object,
       default: null,
     },
+    status: {
+      type: String,
+      default: "0",
+    },
   },
   { timestamps: true }
 );
