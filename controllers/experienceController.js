@@ -1,6 +1,11 @@
 const experienceService = require("../services/experienceService");
 const serviceUtils = require("../utils/ServiceUtils");
 const axios = require("axios");
+const ContentBasedRecommender = require("content-based-recommender");
+const recommender = new ContentBasedRecommender({
+  minScore: 0.1,
+  maxSimilarDocuments: 100,
+});
 
 /* Controller for GET: /api/experiences/date/:dayOfYear */
 
@@ -186,5 +191,28 @@ exports.deleteExperienceById = async (req, res) => {
         internalMessage: "Error occur while deleting experience",
       },
     });
+  }
+};
+
+exports.getSimilarExperience = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const experiences = await experienceService.getExperiences(
+      {},
+      { createdAt: -1 }
+    );
+    const docs = experiences.map((item) => ({
+      id: item._id,
+      content: item.title + item.theme,
+    }));
+
+    recommender.train(docs);
+    const similarDocuments = recommender.getSimilarDocuments(id, 0, 10);
+    return res
+      .status(200)
+      .json({ similarDocuments: similarDocuments.map((item) => item.id) });
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({});
   }
 };

@@ -6,6 +6,7 @@ const { requireAuth } = require("../middlewares/authMiddleware");
 router.get("/", experienceController.getExperiences);
 router.get("/date/:dayOfYear", experienceController.getExperiencesByDate);
 router.get("/:id", experienceController.getExperienceById);
+router.get("/similar/:id", experienceController.getSimilarExperience);
 router.post("/", requireAuth, experienceController.createExperience);
 router.put("/:id", requireAuth, experienceController.updateExperienceById);
 router.put(
