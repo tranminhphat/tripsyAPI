@@ -26,7 +26,7 @@ exports.createUser = async (model) => {
 
   if (avatarBase64) {
     const { data } = await axios.post(
-      "http://localhost:2004/api/upload/image",
+      "http://localhost:2004/api/upload/avatar",
       {
         data: avatarBase64,
         userId: user._id,
