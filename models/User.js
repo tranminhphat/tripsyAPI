@@ -59,10 +59,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    isIdVerified: {
-      type: Boolean,
-      default: false,
-    },
     isPayOutEnabled: {
       type: Boolean,
       default: false,
