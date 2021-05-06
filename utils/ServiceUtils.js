@@ -51,7 +51,7 @@ exports.createFilteredExperienceObject = (filterArray) => {
     } else if (key === "location") {
       newFilterObject["address.city"] = value;
     } else if (key === "title") {
-      newFilterObject[key] = { $regex: `${value}`, $options: "i" };
+      newFilterObject["$text"] = { $search: `${value}` };
     } else {
       newFilterObject[key] = value;
     }

@@ -36,7 +36,7 @@ exports.getExperiences = async (req, res) => {
   const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const experiences = await experienceService.getExperiences(
+    let experiences = await experienceService.getExperiences(
       filterObject,
       sortObject
     );

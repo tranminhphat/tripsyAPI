@@ -81,6 +81,11 @@ const experienceSchema = new Schema(
   { timestamps: true }
 );
 
+experienceSchema.index(
+  { title: "text" },
+  { default_language: "en", language_override: "en" }
+);
+
 const Experience = mongoose.model("experience", experienceSchema);
 
 module.exports = Experience;
