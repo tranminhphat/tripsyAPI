@@ -11,6 +11,7 @@ router.use("/activities", require("./activityRoutes"));
 router.use("/reviews", require("./reviewRoutes"));
 router.use("/notifications", require("./notificationRoutes"));
 router.use("/stripe", require("./stripeRoutes"));
+router.use("/vonage", require("./vonageRoutes"));
 router.use("/seeds", require("./seedRoutes"));
 
 module.exports = router;

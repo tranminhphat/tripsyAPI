@@ -45,8 +45,6 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String,
       required: true,
-      minlength: [10, "Invalid phone number"],
-      maxlength: [10, "Invalid phone number"],
     },
     address: {
       type: String,
@@ -60,6 +58,10 @@ const userSchema = new Schema(
       default: false,
     },
     isPayOutEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    isPhoneVerified: {
       type: Boolean,
       default: false,
     },
