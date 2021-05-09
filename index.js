@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const config = require("./config");
 const routes = require("./routes");
+const cronjob = require("./handlers/cronjobHandler");
 require("./seeds/seed");
 
 const whitelist = config.CORS_WHITELIST;

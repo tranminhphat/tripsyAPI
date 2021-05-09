@@ -1,4 +1,5 @@
 const notificationService = require("../services/notificationService");
+const activityService = require("../services/activityService");
 
 /* Controller for GET: /api/notifications */
 
