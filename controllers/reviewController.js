@@ -1,4 +1,5 @@
 const reviewService = require("../services/reviewService");
+const akinService = require("../services/akinService");
 const serviceUtils = require("../utils/ServiceUtils.js");
 const Pagination = require("../utils/Pagination");
 
@@ -42,6 +43,10 @@ exports.getReviews = async (req, res) => {
 exports.createReview = async (req, res) => {
   const model = { ...req.body };
   const { _id: userId } = req.user;
+
+  if (model.numOfStars > 3 && model.onModel === "Experience") {
+    akinService.addActivityLog(userId, model.objectId);
+  }
   try {
     const review = await reviewService.createReview({ ...model, userId });
     return res.status(201).send(review._id);
