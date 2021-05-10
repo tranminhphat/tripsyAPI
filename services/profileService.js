@@ -1,6 +1,19 @@
 const Profile = require("../models/Profile");
 const mongoose = require("mongoose");
 
+exports.getProfiles = async () => {
+  return await Profile.aggregate([
+    {
+      $lookup: {
+        from: "experiences",
+        localField: "savedExperiences",
+        foreignField: "_id",
+        as: "savedExperiencesList",
+      },
+    },
+  ]);
+};
+
 exports.getProfileById = async (id) => {
   return (
     await Profile.aggregate([

@@ -3,7 +3,7 @@ const activityService = require("../services/activityService");
 const notificationService = require("../services/notificationService");
 
 const job = new CronJob(
-  "* * 6 * * *",
+  "59 59 23 * * *",
   async () => {
     try {
       const activities = await activityService.getActivities(
@@ -13,7 +13,10 @@ const job = new CronJob(
       const now = Math.round(Date.now() / 1000);
       if (activities.length !== 0) {
         activities.forEach(async (activity) => {
-          if (activity.date.dateObject.unix - now < 2 * 86400) {
+          if (
+            activity.date.dateObject.unix - now < 86400 &&
+            activity.date.dateObject.unix - now > 0
+          ) {
             await notificationService.createNotification({
               receiverId: activity.experience.hostId,
               message: `Hoạt động ${activity.experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} sắp bắt đầu`,

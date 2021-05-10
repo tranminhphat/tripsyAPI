@@ -1,5 +1,6 @@
 const profileService = require("../services/profileService");
 const themeService = require("../services/themeService");
+const akinService = require("../services/akinService");
 
 /* Controller for GET: /api/profiles/id */
 
@@ -71,6 +72,7 @@ exports.updateProfileById = async (req, res) => {
 /* Controller for PATCH: /api/profiles/id/save-experience/experienceId */
 exports.saveExperience = async (req, res) => {
   const { id, experienceId } = req.params;
+  const { id: userId } = req.user;
 
   const profile = await profileService.getProfileById(id);
 
@@ -85,6 +87,12 @@ exports.saveExperience = async (req, res) => {
   const operator = savedExperiences.includes(experienceId)
     ? "$pull"
     : "$addToSet";
+
+  if (operator === "$addToSet") {
+    akinService.addActivityLog(userId, experienceId);
+  } else {
+    akinService.removeActivityLog(userId, experienceId);
+  }
 
   try {
     const profile = await profileService.savedExperience(
