@@ -1,4 +1,5 @@
 const experienceService = require("../services/experienceService");
+const akinService = require("../services/akinService");
 const serviceUtils = require("../utils/ServiceUtils");
 const axios = require("axios");
 const ContentBasedRecommender = require("content-based-recommender");
@@ -213,5 +214,15 @@ exports.getSimilarExperience = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(404).json({});
+  }
+};
+
+exports.getRecommendExperienceForUser = async (req, res) => {
+  const { id: userId } = req.params;
+  try {
+    const data = await akinService.getRecommendForUserId(userId);
+    return res.status(200).json({ data });
+  } catch (err) {
+    console.error(err);
   }
 };
