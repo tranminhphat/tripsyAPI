@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.login(username, password);
-    const token = createToken(user._id, JWT_SECRET);
+    const token = createToken({ id: user._id, role: user.roleId }, JWT_SECRET);
     res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     return res.status(200).json({ userId: user._id });
   } catch (err) {

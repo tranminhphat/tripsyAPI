@@ -9,7 +9,7 @@ exports.createToken = (
   callback = undefined
 ) => {
   return jwt.sign(
-    { id },
+    id,
     secretKey,
     {
       expiresIn: expireTime,

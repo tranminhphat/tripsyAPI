@@ -65,10 +65,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    roleId: {
-      type: Schema.Types.ObjectId,
-      ref: "Role",
-    },
+    roleId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Role",
+      },
+    ],
     profileId: {
       type: Schema.Types.ObjectId,
       ref: "Profile",

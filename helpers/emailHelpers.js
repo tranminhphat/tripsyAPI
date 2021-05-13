@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendEmailVerification = (userId, userEmail) => {
-  createToken(userId, EMAIL_SECRET, undefined, (err, emailToken) => {
+  createToken({ userId }, EMAIL_SECRET, undefined, (err, emailToken) => {
     if (err) {
       console.log(err);
       return;
