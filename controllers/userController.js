@@ -28,8 +28,8 @@ exports.getUsers = async (req, res) => {
   const sortObject = serviceUtils.createSortObject(sort);
 
   try {
-    const data = await userService.getUsers(filterObject, sortObject);
-    return res.status(200).send(data);
+    const users = await userService.getUsers(filterObject, sortObject);
+    return res.status(200).json({ users });
   } catch (err) {
     console.error(err);
     return res.status(400).json({
