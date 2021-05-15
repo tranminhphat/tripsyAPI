@@ -216,3 +216,29 @@ exports.verifyIdentity = async (req, res) => {
     });
   }
 };
+
+/* Controller for DELETE: /api/users/id */
+exports.deleteUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await userService.deleteUserById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        error: {
+          userMessage: "Người dùng không tồn tại",
+          internalMessage: "User is not existed",
+        },
+      });
+    }
+
+    return res.status(200).json({ user });
+  } catch (err) {
+    return res.status(400).json({
+      error: {
+        userMessage: "Người dùng không tồn tại",
+        internalMessage: "User is not existed",
+      },
+    });
+  }
+};

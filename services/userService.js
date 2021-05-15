@@ -41,3 +41,7 @@ exports.createUser = async (model) => {
 exports.updateUserById = (id, updatedProperties) => {
   return User.findByIdAndUpdate(id, updatedProperties, { new: true });
 };
+
+exports.deleteUserById = (id) => {
+  return User.findByIdAndDelete(id);
+};

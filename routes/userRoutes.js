@@ -10,5 +10,6 @@ router.put("/change-password", requireAuth, userController.changePassword);
 router.put("/change-avatar", requireAuth, userController.changeAvatar);
 router.put("/verify-id", requireAuth, userController.verifyIdentity);
 router.put("/:id", requireAuth, userController.updateUserById);
+router.delete("/:id", requireAuth, userController.deleteUserById);
 
 module.exports = router;
