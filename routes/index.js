@@ -3,6 +3,7 @@ const router = Router();
 
 router.use("/auth", require("./authRoutes"));
 router.use("/users", require("./userRoutes"));
+router.use("/roles", require("./roleRoutes"));
 router.use("/upload", require("./uploadRoutes"));
 router.use("/experiences", require("./experienceRoutes"));
 router.use("/profiles", require("./profileRoutes"));
