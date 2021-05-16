@@ -15,11 +15,11 @@ exports.getUserById = (id) => {
 };
 
 exports.createUser = async (model) => {
-  const { avatarBase64 } = model;
+  const { avatarBase64, roles } = model;
   const role = await roleService.getRoleByRoleName("user");
   const profile = await profileService.createProfile();
   let userProperties = _.omit(
-    { ...model, roleId: [role._id], profileId: profile._id },
+    { ...model, roleId: roles ? roles : [role._id], profileId: profile._id },
     ["avatarBase64"]
   );
   const user = await User.create(userProperties);
