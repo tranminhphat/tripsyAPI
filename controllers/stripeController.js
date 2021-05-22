@@ -170,3 +170,15 @@ exports.createTransfer = async (req, res) => {
     return res.status(400).json({});
   }
 };
+
+/*********** Transaction ***********/
+exports.getTransactions = async (req, res) => {
+  const { limit } = req.query;
+  try {
+    const transactions = await stripeService.getTransactions(limit);
+    return res.status(200).json({ transactions: transactions.data });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({});
+  }
+};

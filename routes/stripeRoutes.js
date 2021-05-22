@@ -21,4 +21,6 @@ router.post(
 
 router.get("/balance/:accountId", stripeController.getBalanceByAccountId);
 
+router.get("/transactions", stripeController.getTransactions);
+
 module.exports = router;

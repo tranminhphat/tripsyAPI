@@ -51,3 +51,11 @@ exports.createTransfer = async (destination, amount) => {
     destination,
   });
 };
+
+/********* Transaction *********/
+exports.getTransactions = async (limit) => {
+  if (!limit) {
+    return await stripe.paymentIntents.list({ limit });
+  }
+  return await stripe.paymentIntents.list();
+};
