@@ -14,6 +14,7 @@ router.use("/themes", require("./themeRoutes"));
 router.use("/notifications", require("./notificationRoutes"));
 router.use("/stripe", require("./stripeRoutes"));
 router.use("/vonage", require("./vonageRoutes"));
+router.use("/akin", require("./akinRoutes"));
 router.use("/seeds", require("./seedRoutes"));
 
 module.exports = router;

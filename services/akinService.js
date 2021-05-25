@@ -8,7 +8,6 @@ exports.addActivityLog = async (userId, experienceId) => {
 exports.removeActivityLog = async (userId, experienceId) => {
   await akin.activity.removeLog(userId, experienceId, "like");
   await akin.run();
-  console.log(await akin.recommendation.getAllRecommendationsForUser(userId));
 };
 
 exports.getRecommendForUserId = async (userId) => {
