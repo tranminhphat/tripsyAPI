@@ -28,9 +28,7 @@ exports.removeActivityLog = async (req, res) => {
 exports.getRecommendForUserId = async (req, res) => {
   const { id } = req.params;
   try {
-    const {
-      data: { recommendations },
-    } = await akinService.getRecommendForUserId(id);
+    const { recommendations } = await akinService.getRecommendForUserId(id);
     return res.status(200).json({ recommendations });
   } catch (err) {
     console.error(err);
