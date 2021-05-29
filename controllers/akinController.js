@@ -5,10 +5,10 @@ exports.addActivityLog = async (req, res) => {
   const { userId, experienceId } = req.body;
   try {
     await akinService.addActivityLog(userId, experienceId);
-    return res.status(200).data("Success");
+    return res.status(200).json({ message: "Success" });
   } catch (err) {
     console.error(err);
-    return res.status(404).data();
+    return res.status(404).json({});
   }
 };
 
@@ -17,10 +17,10 @@ exports.removeActivityLog = async (req, res) => {
   const { userId, experienceId } = req.body;
   try {
     await akinService.removeActivityLog(userId, experienceId);
-    return res.status(200).data("Success");
+    return res.status(200).json({ message: "Success" });
   } catch (err) {
     console.error(err);
-    return res.status(404).data();
+    return res.status(404).json({});
   }
 };
 
@@ -32,6 +32,6 @@ exports.getRecommendForUserId = async (req, res) => {
     return res.status(200).json({ recommendations });
   } catch (err) {
     console.error(err);
-    return res.status(404).data();
+    return res.status(404).json({});
   }
 };
