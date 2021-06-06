@@ -19,7 +19,7 @@ const incommingActivityJob = new CronJob(
 					) {
 						await notificationService.createNotification({
 							receiverId: activity.experience.hostId,
-							message: `Hoạt động ${activity.experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} sắp bắt đầu`,
+							message: `Hoạt động <b>${activity.experience.title}</b> vào ngày <b>${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year}</b> sắp bắt đầu`,
 							link: `/user/experience-hosting/${activity.experience._id}/activation/${activity._id}`,
 						});
 
@@ -27,7 +27,7 @@ const incommingActivityJob = new CronJob(
 							activity.listOfGuestId.forEach(async (guestId) => {
 								await notificationService.createNotification({
 									receiverId: guestId,
-									message: `Hoạt động ${activity.experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} sắp bắt đầu`,
+									message: `Hoạt động <b>${activity.experience.title}</b> vào ngày <b>${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year}</b> sắp bắt đầu`,
 									link: `/user/activities`,
 								});
 							});
@@ -60,7 +60,7 @@ const inactivatedActivityJob = new CronJob("59 59 5 * * *", async () => {
 					await activityService.deleteActivityById(activity._id);
 					await notificationService.createNotification({
 						receiverId: activity.experience.hostId,
-						message: `Hoạt động ${activity.experience.title} vào ngày ${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year} đã được hủy tự động vì không có khách tham gia`,
+						message: `Hoạt động <b>${activity.experience.title}</b> vào ngày <b>${activity.date.dateObject.day}/${activity.date.dateObject.month}/${activity.date.dateObject.year}</b> đã được hủy tự động vì không có khách tham gia`,
 						link: `/user/experience-hosting/${activity.experience._id}/activation`,
 					});
 				}
