@@ -40,6 +40,7 @@ exports.countReviews = async (filterObj) => {
 		for (let i = 0; i < reviews.length; i++) {
 			averageStars += reviews[i].numOfStars;
 		}
+
 		return {
 			totalItems: reviews.length,
 			averageStars:

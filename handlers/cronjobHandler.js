@@ -1,6 +1,7 @@
-const CronJob = require("cron").CronJob;
 const activityService = require("../services/activityService");
 const notificationService = require("../services/notificationService");
+
+const CronJob = require("cron").CronJob;
 
 const incommingActivityJob = new CronJob(
 	"59 59 23 * * *",
