@@ -27,4 +27,3 @@
 
 # Environment files
 .env
-config/development.js
