@@ -45,7 +45,7 @@ const incommingActivityJob = new CronJob(
 	"America/Los_Angeles"
 );
 
-const inactivatedActivityJob = new CronJob("59 59 5 * * *", async () => {
+const inactivatedActivityJob = new CronJob("59 59 * * * *", async () => {
 	try {
 		const activities = await activityService.getActivities(
 			{ status: "0" },
