@@ -1,88 +1,88 @@
 const cloudinary = require("cloudinary").v2;
-const config = require("../config");
+const config = require("../config/development");
 
 cloudinary.config({
-  cloud_name: config.cloudinary.CLOUD_NAME,
-  api_key: config.cloudinary.API_KEY,
-  api_secret: config.cloudinary.API_SECRET,
+	cloud_name: config.cloudinary.CLOUD_NAME,
+	api_key: config.cloudinary.API_KEY,
+	api_secret: config.cloudinary.API_SECRET,
 });
 
 exports.uploadUserAvatar = async (fileStr, userId) => {
-  const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-    upload_preset: "user",
-    folder: `users/${userId}/avatar`,
-    public_id: "userAvatar",
-  });
-  return uploadedResponse;
+	const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+		upload_preset: "user",
+		folder: `users/${userId}/avatar`,
+		public_id: "userAvatar",
+	});
+	return uploadedResponse;
 };
 
 exports.uploadExperienceGalleryPhotos = async (
-  gallery,
-  userId,
-  experienceId
+	gallery,
+	userId,
+	experienceId
 ) => {
-  const uploadedResponse = [];
-  for (let i = 0; i < gallery.length; i++) {
-    if (!gallery[i].url) {
-      try {
-        const uploadedPhoto = await cloudinary.uploader.upload(
-          gallery[i].base64String,
-          {
-            upload_preset: "user",
-            folder: `users/${userId}/experience/${experienceId}/gallery`,
-            public_id: gallery[i].type,
-          }
-        );
-        uploadedResponse.push({
-          type: gallery[i].type,
-          url: uploadedPhoto.secure_url,
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    } else {
-      uploadedResponse.push({
-        type: gallery[i].type,
-        url: gallery[i].url,
-      });
-    }
-  }
+	const uploadedResponse = [];
+	for (let i = 0; i < gallery.length; i++) {
+		if (!gallery[i].url) {
+			try {
+				const uploadedPhoto = await cloudinary.uploader.upload(
+					gallery[i].base64String,
+					{
+						upload_preset: "user",
+						folder: `users/${userId}/experience/${experienceId}/gallery`,
+						public_id: gallery[i].type,
+					}
+				);
+				uploadedResponse.push({
+					type: gallery[i].type,
+					url: uploadedPhoto.secure_url,
+				});
+			} catch (err) {
+				console.error(err);
+			}
+		} else {
+			uploadedResponse.push({
+				type: gallery[i].type,
+				url: gallery[i].url,
+			});
+		}
+	}
 
-  return uploadedResponse;
+	return uploadedResponse;
 };
 
 exports.uploadExperienceGalleryPhoto = async (photo, userId, experienceId) => {
-  try {
-    const uploadedPhoto = await cloudinary.uploader.upload(photo.base64String, {
-      upload_preset: "user",
-      folder: `users/${userId}/experience/${experienceId}/gallery`,
-      public_id: photo.type,
-    });
-    return {
-      type: photo.type,
-      url: uploadedPhoto.secure_url,
-    };
-  } catch (err) {
-    console.log("here");
-    console.error(err);
-  }
+	try {
+		const uploadedPhoto = await cloudinary.uploader.upload(photo.base64String, {
+			upload_preset: "user",
+			folder: `users/${userId}/experience/${experienceId}/gallery`,
+			public_id: photo.type,
+		});
+		return {
+			type: photo.type,
+			url: uploadedPhoto.secure_url,
+		};
+	} catch (err) {
+		console.log("here");
+		console.error(err);
+	}
 };
 
 exports.uploadIDCardPhotos = async (userId, idCard) => {
-  try {
-    await cloudinary.uploader.upload(idCard.front, {
-      upload_preset: "user",
-      folder: `users/${userId}/idcard/`,
-      public_id: "front-card",
-    });
-    await cloudinary.uploader.upload(idCard.back, {
-      upload_preset: "user",
-      folder: `users/${userId}/idcard/`,
-      public_id: "back-card",
-    });
-  } catch (err) {
-    console.log(err);
-  }
+	try {
+		await cloudinary.uploader.upload(idCard.front, {
+			upload_preset: "user",
+			folder: `users/${userId}/idcard/`,
+			public_id: "front-card",
+		});
+		await cloudinary.uploader.upload(idCard.back, {
+			upload_preset: "user",
+			folder: `users/${userId}/idcard/`,
+			public_id: "back-card",
+		});
+	} catch (err) {
+		console.log(err);
+	}
 
-  return true;
+	return true;
 };
